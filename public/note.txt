@@ -1,0 +1,5 @@
+
+
+www.mywebsite.com/student=>className/class=>function/id=>params
+student=>className= name of the class i.e for homepage we creat Home Class etc
+class=>function = function inside the class to perform some tasks
