@@ -3,3 +3,48 @@
 www.mywebsite.com/student=>className/class=>function/id=>params
 student=>className= name of the class i.e for homepage we creat Home Class etc
 class=>function = function inside the class to perform some tasks
+
+<?php
+
+echo '<pre>';
+print_r($users);
+
+?>
+
+
+class Home extends Controller
+{
+
+    public function index()
+    {
+        //$user = $this->load_model('user');
+        $user = new User();
+        //$data =  $db->query('SELECT * FROM users');
+        //$data = $user->where('id', 1);
+
+        // $arr = [
+        //     'firstname' => 'Taiwo',
+        //     'lastname' => 'Abulliah',
+
+        // ];
+
+        //$user->insert($arr);
+        //$user->update(3, $arr);
+
+        $user->delete(3);
+
+        $data = $user->findAll();
+        $this->view('home', ['users' => $data]);
+    }
+}
+
+
+ public function load_model($model_name)
+    {
+        if (file_exists(__DIR__ . '/../models/' . ucfirst($model_name) . '.php')) {
+            require __DIR__ . '/../models/' . ucfirst($model_name) . '.php';
+            return new $model_name();
+        }
+
+        return false;
+    }

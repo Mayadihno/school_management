@@ -5,9 +5,9 @@ class Database
 
     private function connect()
     {
-        $string = 'mysql:host=localhost;dbname=school_db';
-        $root = 'root';
-        $pass = '';
+        $string = DB_DRIVER . ':host=' . DB_HOST . ';dbname=' . DB_NAME;
+        $root = DB_USER;
+        $pass = DB_PASS;
 
         $con = new PDO($string, $root, $pass);
         if (!$con) {
@@ -17,7 +17,7 @@ class Database
         return $con;
     }
 
-    public function run($query, $data = [], $data_type = 'object')
+    public function query($query, $data = [], $data_type = 'object')
     {
         $con = $this->connect();
         $stmt = $con->prepare($query);

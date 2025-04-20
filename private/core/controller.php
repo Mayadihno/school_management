@@ -12,4 +12,14 @@ class Controller
             require __DIR__ . '/../views/notFound.view.php';
         }
     }
+
+    public function load_model($model_name)
+    {
+        if (file_exists(__DIR__ . '/../models/' . ucfirst($model_name) . '.php')) {
+            require __DIR__ . '/../models/' . ucfirst($model_name) . '.php';
+            return new $model_name();
+        }
+
+        return false;
+    }
 }

@@ -6,6 +6,8 @@ class Home extends Controller
 
     public function index()
     {
-        $this->view('home');
+        $user = new User();
+        $data = $user->findAll();
+        $this->view('home', ['users' => $data]);
     }
 }

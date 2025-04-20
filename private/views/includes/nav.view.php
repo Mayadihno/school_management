@@ -1,4 +1,11 @@
 <style>
+    nav ul li a {
+        width: 110px;
+        text-align: center;
+        border-left: solid thin #eee;
+        border-right: solid thin #fff;
+    }
+
     nav ul li a:hover {
         background-color: grey !important;
         color: #fff !important;
@@ -27,11 +34,14 @@
                 <li class="nav-item">
                     <a class="nav-link text-uppercase" href="<?php ROOT ?>tests">test</a>
                 </li>
+
+            </ul>
+            <ul class="ms-auto navbar-nav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-uppercase" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         User
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="<?php ROOT ?>profile">Profile</a></li>
                         <li><a class="dropdown-item" href="<?php ROOT ?>home">Dashboard</a></li>
                         <div class="dropdown-divider"></div>
