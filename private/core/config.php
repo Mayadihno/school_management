@@ -8,3 +8,6 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'school_db');
 define('DB_DRIVER', 'mysql');
+
+
+define('RANDOM', 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
