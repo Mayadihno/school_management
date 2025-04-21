@@ -34,6 +34,10 @@ class User extends Model
         if (empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['email'] = "Email is not valid";
         }
+        //validate email if already exists
+        if ($this->where('email', $data['email'])) {
+            $this->errors['email'] = "Email already exists";
+        }
         //validate gender
         if (empty($data['gender']) || !in_array($data['gender'], array('male', 'female', 'other'))) {
             $this->errors['gender'] = "Select at least one Gender";
@@ -64,7 +68,7 @@ class User extends Model
     }
     public function make_user_id($data)
     {
-        $data['user_id'] = $this->make_uniqueid();
+        $data['user_id'] = make_uniqueid();
         return $data;
     }
     public function make_school_id($data)
@@ -73,15 +77,5 @@ class User extends Model
             $data['school_id'] = $_SESSION['USER']->school_id;
         }
         return $data;
-    }
-
-    public function make_uniqueid()
-    {
-        $uniq = uniqid('', true);
-        $cleaned = str_replace('.', '', $uniq);
-        $base = substr($cleaned, 0, 13);
-        $random = substr(str_shuffle(RANDOM), 0, 40);
-        $text = $base . $random;
-        return $text;
     }
 }

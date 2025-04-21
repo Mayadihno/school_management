@@ -26,6 +26,15 @@
                     <a class="nav-link active text-uppercase" aria-current="page" href="<?php ROOT ?>home">Dashboard</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link text-uppercase" href="<?php ROOT ?>schools">schools</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-uppercase" href="<?php ROOT ?>staff">staff</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-uppercase" href="<?php ROOT ?>students">students</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link text-uppercase" href="<?php ROOT ?>classes">classes</a>
                 </li>
                 <li class="nav-item">
