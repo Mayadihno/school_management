@@ -39,7 +39,7 @@
             <ul class="ms-auto navbar-nav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-uppercase" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        User
+                        <?= Auth::getFirstname() ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="<?php ROOT ?>profile">Profile</a></li>
