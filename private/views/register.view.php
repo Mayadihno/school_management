@@ -5,7 +5,7 @@
     <form method="post">
         <div class="mx-auto p-4 shadow rounded mt-5" style="width: 100%; max-width: 340px;">
             <h2 class="text-center">My school</h2>
-            <img src="<?= ROOT ?>assets/logo.avif" alt="" class="border border-success d-block mx-auto rounded-circle" style="width: 120px; height: 120px;">
+            <img src="<?= ASSETS ?>logo.avif" alt="" class="border border-success d-block mx-auto rounded-circle" style="width: 120px; height: 120px;">
             <h2 class="text-primary mb-2">Register</h2>
 
             <input type="text" value="<?= get_value('firstname') ?>" name="firstname" placeholder="First Name" class="form-control mb-1">

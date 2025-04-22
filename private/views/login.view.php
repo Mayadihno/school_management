@@ -5,7 +5,7 @@
     <form action="" method="post">
         <div class="mx-auto p-4 shadow rounded mt-5" style="width: 100%;max-width: 340px;">
             <h2 class="text-center">My school</h2>
-            <img src="<?php ROOT; ?>assets/logo.avif" alt="" class=" border border-success d-block mx-auto rounded-circle" style="width: 120px;height: 120px;">
+            <img src="<?= ASSETS; ?>logo.avif" alt="" class=" border border-success d-block mx-auto rounded-circle" style="width: 120px;height: 120px;">
             <h2 class="text-primary mb-2">Login</h2>
             <?php if (count($errors) > 0) : ?>
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">

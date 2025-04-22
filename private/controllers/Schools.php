@@ -13,4 +13,16 @@ class Schools extends Controller
         $data = $school->findAll();
         $this->view('schools', ['schools' => $data]);
     }
+
+
+    public function add()
+    {
+        if (!Auth::authenticated()) {
+            $this->redirect('login');
+        }
+
+        $errors = array();
+
+        $this->view('schools.add', ['errors' => $errors]);
+    }
 }

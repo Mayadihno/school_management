@@ -12,7 +12,7 @@ class App
         $URL = $this->getURL();
 
         // Default controller name
-        $this->controller = 'Home';
+        $this->controller = 'home';
 
         // If a valid controller is passed via URL
         if (isset($URL[0]) && file_exists(__DIR__ . '/../controllers/' . $URL[0] . '.php')) {
@@ -43,7 +43,7 @@ class App
     private function getURL()
 
     {
-        return isset($_GET['url']) ? explode('/', filter_var(trim($_GET['url'], '/'), FILTER_SANITIZE_URL)) : 'home';
+        return isset($_GET['url']) ? explode('/', filter_var(trim($_GET['url'], '/'), FILTER_SANITIZE_URL)) : ['home'];
         // Assuming URL is passed as a query parameter, e.g., ?url=controller/method/param1/param2
     }
 }
