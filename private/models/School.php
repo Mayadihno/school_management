@@ -9,7 +9,9 @@ class School extends Model
     protected $beforeInsert = [
         'make_user_id',
         'make_school_id',
-        'hash_password',
+    ];
+    protected $afterSelect = [
+        'get_user',
     ];
 
     public function validate($data)
@@ -25,13 +27,26 @@ class School extends Model
     }
     public function make_user_id($data)
     {
-        $data['user_url'] = make_uniqueid();
+        if (isset($_SESSION['USER']->school_id)) {
+            $data['user_id'] = $_SESSION['USER']->user_id;
+        }
         return $data;
     }
     public function make_school_id($data)
     {
 
         $data['school_id'] =  make_uniqueid();
+        return $data;
+    }
+
+    public function get_user($data)
+    {
+        $user = new User();
+        foreach ($data as $key => $value) {
+            $result = $user->where('user_id', $value->user_id);
+            $data[$key]->user = is_array($result) ? $result[0] : false;
+            //we are setting the new data key to user to accomadate the new value
+        }
         return $data;
     }
 }

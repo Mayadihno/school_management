@@ -11,6 +11,19 @@ print_r($users);
 
 ?>
 
+public function findAll()
+    {
+        $query = "SELECT * FROM $this->table";
+        return $this->query($query);
+    }
+
+     $school = $school->where('id', $id);
+        if (!$school) {
+            $school = (object)[];
+            //converting an array to object
+            $school->school = '';
+        }
+
 
 class Home extends Controller
 {

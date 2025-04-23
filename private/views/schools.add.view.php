@@ -2,7 +2,7 @@
 <?php $this->view('includes/nav'); ?>
 
 <div class="container-fluid p-4 shadow mt-5" style="max-width: 1000px; margin: auto;">
-    <?php $this->view('includes/crumbs'); ?>
+    <?php $this->view('includes/crumbs', ['crumbs' => $crumbs]); ?>
     <div class="card-group justify-content-center">
         <form action="" method="post">
             <h3>Add New School</h3>

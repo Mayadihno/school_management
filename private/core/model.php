@@ -6,6 +6,7 @@ class Model extends Database
     public $errors = array();
     protected $allowedColumns = [];
     protected $beforeInsert = [];
+    protected $afterSelect = [];
 
 
     public function __construct()
@@ -21,15 +22,35 @@ class Model extends Database
         $column = addslashes($column);
         $query = "SELECT * FROM $this->table WHERE $column = :value";
 
-        return $this->query($query, [
+        $data = $this->query($query, [
             'value' => $value
         ]);
+
+        //run this after selecting from db
+        if (is_array($data)) {
+            if (property_exists($this, 'afterSelect')) {
+                foreach ($this->afterSelect as $func) {
+                    $data = $this->$func($data);
+                }
+            }
+        }
+        return $data;
     }
 
     public function findAll()
     {
         $query = "SELECT * FROM $this->table";
-        return $this->query($query);
+        $data = $this->query($query);
+
+        //run this after selecting from db
+        if (is_array($data)) {
+            if (property_exists($this, 'afterSelect')) {
+                foreach ($this->afterSelect as $func) {
+                    $data = $this->$func($data);
+                }
+            }
+        }
+        return $data;
     }
     public function insert($data)
     {
@@ -41,7 +62,7 @@ class Model extends Database
                 }
             }
         }
-
+        //run this before insert to db
         if (property_exists($this, 'beforeInsert')) {
             foreach ($this->beforeInsert as $func) {
                 $data = $this->$func($data);

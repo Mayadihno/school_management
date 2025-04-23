@@ -1,11 +1,11 @@
 <?php
 
-function get_value($key)
+function get_value($key, $default = '')
 {
     if (isset($_POST[$key])) {
         return $_POST[$key];
     }
-    return '';
+    return $default;
 }
 
 function get_select($key, $value)
@@ -29,4 +29,10 @@ function make_uniqueid()
     $random = substr(str_shuffle(RANDOM), 0, 40);
     $text = $base . $random;
     return $text;
+}
+
+
+function get_date($date,)
+{
+    return date("jS M, Y", strtotime($date));
 }
