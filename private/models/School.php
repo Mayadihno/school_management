@@ -9,6 +9,7 @@ class School extends Model
     protected $beforeInsert = [
         'make_user_id',
         'make_school_id',
+        'make_id',
     ];
     protected $afterSelect = [
         'get_user',
@@ -27,7 +28,7 @@ class School extends Model
     }
     public function make_user_id($data)
     {
-        if (isset($_SESSION['USER']->school_id)) {
+        if (isset($_SESSION['USER']->user_id)) {
             $data['user_id'] = $_SESSION['USER']->user_id;
         }
         return $data;
@@ -36,6 +37,12 @@ class School extends Model
     {
 
         $data['school_id'] =  make_uniqueid();
+        return $data;
+    }
+    public function make_id($data)
+    {
+
+        $data['id'] =  make_uniqueid();
         return $data;
     }
 

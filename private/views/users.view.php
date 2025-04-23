@@ -3,6 +3,9 @@
 
 <div class="container-fluid p-4 shadow mt-5" style="max-width: 1000px; margin: auto;">
     <?php $this->view('includes/crumbs'); ?>
+    <a href="<?= ROOT ?>register">
+        <button class="btn btn-sm btn-primary"><i class="fas fa-plus pe-2"></i>Add New</button>
+    </a>
     <div class="card-group justify-content-center">
         <?php if ($users) : ?>
             <?php foreach ($users as $user) : ?>

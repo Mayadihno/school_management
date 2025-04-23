@@ -15,7 +15,7 @@
     <div class="container-fluid">
         <a class="navbar-brand me-5" href="#">
             <img src="<?= ASSETS ?>/logo.avif" alt="Logo" width="50" height="50" class=" rounded-circle">
-            <span class="" style="font-size: 13px; padding-top: 10px;">My School</span>
+            <span class="" style="font-size: 13px; padding-top: 10px;"><?= Auth::getSchool_name() ?></span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

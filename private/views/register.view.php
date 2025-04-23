@@ -39,7 +39,9 @@
                 <option <?= get_select('rank', 'reception') ?> value="reception">Reception</option>
                 <option <?= get_select('rank', 'lecturer') ?> value="lecturer">Lecturer</option>
                 <option <?= get_select('rank', 'admin') ?> value="admin">Admin</option>
-                <option <?= get_select('rank', 'super-admin') ?> value="super-admin">Super Admin</option>
+                <?php if (Auth::getRank() == 'super-admin'): ?>
+                    <option <?= get_select('rank', 'super-admin') ?> value="super-admin">Super Admin</option>
+                <?php endif; ?>
             </select>
             <?php if ($form_submitted && !empty($errors['rank'])) : ?>
                 <small class="text-danger"><?= $errors['rank'] ?></small>
@@ -56,7 +58,9 @@
             <?php endif; ?>
 
             <div class="d-flex justify-content-between align-items-center mt-4">
-                <button type="button" class="btn btn-danger">Cancel</button>
+                <a href="<?= ROOT ?>users">
+                    <button type="button" class="btn btn-danger">Cancel</button>
+                </a>
                 <button type="submit" class="btn btn-primary">Register</button>
             </div>
         </div>

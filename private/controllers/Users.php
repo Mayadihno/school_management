@@ -9,7 +9,8 @@ class Users extends Controller
             $this->redirect('login');
         }
         $user = new User();
-        $data = $user->findAll();
+        $school_id =  Auth::getSchool_id();
+        $data = $user->query("select * from users where school_id = :school_id", ['school_id' => $school_id]);
         $this->view('users', ['users' => $data]);
     }
 }
