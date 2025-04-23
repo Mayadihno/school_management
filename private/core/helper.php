@@ -44,3 +44,15 @@ function show($data)
     print_r($data);
     echo '</pre>';
 }
+
+
+function get_image($image, $gender = '')
+{
+    if (!file_exists($image)) {
+        $image = ASSETS . 'female-icon.jpg';
+        if ($gender == 'male') {
+            $image = ASSETS . 'male-icon.png';
+        }
+    }
+    return $image;
+}
