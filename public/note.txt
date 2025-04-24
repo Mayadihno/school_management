@@ -10,7 +10,11 @@ echo '<pre>';
 print_r($users);
 
 ?>
-
+// // code...
+        // if (property_exists($this, 'table')) {
+        //     $this->table = strtolower($this::class) . "s";
+        //     print_r($this->table);
+        // }
 public function findAll()
     {
         $query = "SELECT * FROM $this->table";

@@ -11,9 +11,8 @@ class Model extends Database
 
     public function __construct()
     {
-        if (property_exists($this, 'table')) {
-            $this->table = strtolower($this::class) . 's';
-            //print_r($this->table);
+        if (!isset($this->table) || empty($this->table)) {
+            $this->table = strtolower($this::class) . "s";
         }
     }
 
@@ -61,9 +60,9 @@ class Model extends Database
     }
 
 
-    public function findAll()
+    public function findAll($column = 'date', $orderBy = 'DESC')
     {
-        $query = "SELECT * FROM $this->table";
+        $query = "SELECT * FROM $this->table ORDER BY $column $orderBy";
         $data = $this->query($query);
 
         //run this after selecting from db

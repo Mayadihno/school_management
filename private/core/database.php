@@ -17,7 +17,7 @@ class Database
         return $con;
     }
 
-    public function query($query, $data = [], $data_type = 'object')
+    public function query($query, $data = array(), $data_type = 'object')
     {
         $con = $this->connect();
         $stmt = $con->prepare($query);
@@ -32,7 +32,6 @@ class Database
                 if (is_array($data) && count($data) > 0) {
                     return $data;
                 }
-               
             }
         }
         return false;
