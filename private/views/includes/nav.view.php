@@ -29,16 +29,13 @@
                     <a class="nav-link text-uppercase" href="<?= ROOT ?>schools">schools</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-uppercase" href="<?= ROOT ?>staff">staff</a>
+                    <a class="nav-link text-uppercase" href="<?= ROOT ?>users">staff</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-uppercase" href="<?= ROOT ?>students">students</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-uppercase" href="<?= ROOT ?>classes">classes</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-uppercase" href="<?= ROOT ?>users">users</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-uppercase" href="<?= ROOT ?>tests">test</a>

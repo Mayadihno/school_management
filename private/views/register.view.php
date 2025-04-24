@@ -33,16 +33,23 @@
                 <small class="text-danger"><?= $errors['gender'] ?></small>
             <?php endif; ?>
 
-            <select name="rank" class="form-select mb-1">
-                <option <?= get_select('rank', '') ?> value="">--Select Rank--</option>
-                <option <?= get_select('rank', 'student') ?> value="student">Student</option>
-                <option <?= get_select('rank', 'reception') ?> value="reception">Reception</option>
-                <option <?= get_select('rank', 'lecturer') ?> value="lecturer">Lecturer</option>
-                <option <?= get_select('rank', 'admin') ?> value="admin">Admin</option>
-                <?php if (Auth::getRank() == 'super-admin'): ?>
-                    <option <?= get_select('rank', 'super-admin') ?> value="super-admin">Super Admin</option>
-                <?php endif; ?>
-            </select>
+            <?php if ($mode == 'students'): ?>
+                <input name="rank" value='student' type="hidden">
+            <?php else: ?>
+                <select name="rank" class="form-select mb-1">
+                    <option <?= get_select('rank', '') ?> value="">--Select Rank--</option>
+                    <option <?= get_select('rank', 'student') ?> value="student">Student</option>
+                    <option <?= get_select('rank', 'reception') ?> value="reception">Reception</option>
+                    <option <?= get_select('rank', 'lecturer') ?> value="lecturer">Lecturer</option>
+                    <option <?= get_select('rank', 'admin') ?> value="admin">Admin</option>
+                    <?php if (Auth::getRank() == 'super-admin'): ?>
+                        <option <?= get_select('rank', 'super-admin') ?> value="super-admin">Super Admin</option>
+                    <?php endif; ?>
+                </select>
+
+            <?php endif; ?>
+
+
             <?php if ($form_submitted && !empty($errors['rank'])) : ?>
                 <small class="text-danger"><?= $errors['rank'] ?></small>
             <?php endif; ?>
@@ -58,9 +65,15 @@
             <?php endif; ?>
 
             <div class="d-flex justify-content-between align-items-center mt-4">
-                <a href="<?= ROOT ?>users">
-                    <button type="button" class="btn btn-danger">Cancel</button>
-                </a>
+                <?php if ($mode == 'students'): ?>
+                    <a href="<?= ROOT ?>students">
+                        <button type="button" class="btn btn-danger">Cancel</button>
+                    </a>
+                <?php else: ?>
+                    <a href="<?= ROOT ?>users">
+                        <button type="button" class="btn btn-danger">Cancel</button>
+                    </a>
+                <?php endif; ?>
                 <button type="submit" class="btn btn-primary">Register</button>
             </div>
         </div>
