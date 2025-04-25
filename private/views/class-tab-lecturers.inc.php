@@ -5,7 +5,18 @@
              <input type="text" class="form-control" placeholder="Serach" aria-label="Search" aria-describedby="basic-addon1">
          </div>
      </form>
-     <a href="<?= ROOT ?>single_class/<?= $class->id ?>?tab=lecturers-add">
+     <a href="<?= ROOT ?>single_class/<?= $class->id ?>?tab=lecturers-add&select=true">
          <button class="btn btn-sm btn-primary"><i class="fas fa-plus pe-2"></i>Add Lecturer</button>
      </a>
  </nav>
+
+ <div class="card-group">
+     <?php if (is_array($lecturers)) : ?>
+         <?php foreach ($lecturers as $user) : ?>
+             <?php
+                $user = $user->user;
+                include(view_path('user'))
+                ?>
+         <?php endforeach; ?>
+     <?php endif; ?>
+ </div>

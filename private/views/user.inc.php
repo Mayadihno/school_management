@@ -7,5 +7,8 @@
         </h5>
         <p class="card-text">Rank: <?= ucwords(str_replace('-', ' ', $user->rank)); ?></p>
         <a href="<?= ROOT ?>profile/<?= $user->user_id ?>" class="btn btn-primary">Profile</a>
+        <?php if (isset($_GET['select'])): ?>
+            <button class="btn btn-success float-end" value="<?= $user->user_id ?>" name="selected">Select</button>
+        <?php endif; ?>
     </div>
 </div>

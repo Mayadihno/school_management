@@ -12,25 +12,15 @@
                 </div>
             </form>
         </nav>
-        <a href="<?= ROOT ?>register?mode=students">
+        <a href="<?= ROOT ?>register">
             <button class="btn btn-sm btn-primary"><i class="fas fa-plus pe-2"></i>Add New</button>
         </a>
     </div>
     <div class="card-group justify-content-center">
 
         <?php if ($students) : ?>
-            <?php foreach ($students as $student) : ?>
-                <?php $image = get_image($student->image, $student->gender); ?>
-                <div class="card shadow m-2" style="max-width: 14rem; min-width:14rem">
-                    <img src="<?= $image  ?>" class="card-img-top" alt="">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <?= $student->firstname . ' ' . $student->lastname; ?>
-                        </h5>
-                        <p class="card-text">Rank: <?= ucwords(str_replace('-', ' ', $student->rank)); ?></p>
-                        <a href="<?= ROOT ?>profile/<?= $student->user_id ?>" class="btn btn-primary">Profile</a>
-                    </div>
-                </div>
+            <?php foreach ($students as $user) : ?>
+                <?php include(view_path('user')) ?>
             <?php endforeach; ?>
         <?php else : ?>
             <div class="alert alert-danger" role="alert">
