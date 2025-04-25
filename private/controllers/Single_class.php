@@ -9,13 +9,14 @@ class Single_class extends Controller
         if (!Auth::authenticated()) {
             $this->redirect('login');
         }
-        $user = new User();
-        $data = $user->whereOne('user_id', $id);
+        $class = new Classes_model;
+        $data = $class->whereOne('id', $id);
         $crumbs[] = ['Dashboard', ''];
         $crumbs[] = ['Classes', 'classes'];
         if ($data) {
             $crumbs[] = [$data->class, 'class'];
         }
-        $this->view('single-class', ['class' => $data, 'crumbs' => $crumbs]);
+        $page_tab = isset($_GET['tab']) ? $_GET['tab'] : 'lecturers';
+        $this->view('single-class', ['class' => $data, 'crumbs' => $crumbs, 'page_tab' => $page_tab]);
     }
 }

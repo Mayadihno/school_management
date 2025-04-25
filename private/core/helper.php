@@ -56,3 +56,13 @@ function get_image($image, $gender = '')
     }
     return $image;
 }
+
+
+function view_path($view)
+{
+    if (file_exists(__DIR__ . '/../views/' . $view . '.inc.php')) {
+        return __DIR__ . '/../views/' . $view . '.inc.php';
+    } else {
+        return __DIR__ . '/../views/notFound.view.php';
+    }
+}
