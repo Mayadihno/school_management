@@ -2,6 +2,8 @@
 
 class Database
 {
+    // Array to hold functions to be executed after select queries
+    protected $afterSelect = [];
 
     private function connect()
     {
@@ -21,18 +23,29 @@ class Database
     {
         $con = $this->connect();
         $stmt = $con->prepare($query);
+        $results = false;
+
+
         if ($stmt) {
             $check = $stmt->execute($data);
             if ($check) {
                 if ($data_type == 'object') {
-                    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+                    $results = $stmt->fetchAll(PDO::FETCH_OBJ);
                 } else {
-                    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                }
-                if (is_array($data) && count($data) > 0) {
-                    return $data;
+                    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 }
             }
+        }
+        //run this after selecting from db
+        if (is_array($results)) {
+            if (property_exists($this, 'afterSelect')) {
+                foreach ($this->afterSelect as $func) {
+                    $results = $this->$func($results);
+                }
+            }
+        }
+        if (is_array($results) && count($results) > 0) {
+            return $results;
         }
         return false;
     }

@@ -16,10 +16,10 @@ class Model extends Database
         }
     }
 
-    public function where($column, $value,)
+    public function where($column, $value, $orderBy = 'DESC', $col = 'date')
     {
         $column = addslashes($column);
-        $query = "SELECT * FROM $this->table WHERE $column = :value";
+        $query = "SELECT * FROM $this->table WHERE $column = :value ORDER BY $col $orderBy";
 
         $data = $this->query($query, [
             'value' => $value
@@ -36,10 +36,10 @@ class Model extends Database
         return $data;
     }
 
-    public function whereOne($column, $value,)
+    public function whereOne($column, $value, $orderBy = 'DESC', $col = 'date')
     {
         $column = addslashes($column);
-        $query = "SELECT * FROM $this->table WHERE $column = :value";
+        $query = "SELECT * FROM $this->table WHERE $column = :value ORDER BY $col $orderBy";
 
         $data = $this->query($query, [
             'value' => $value

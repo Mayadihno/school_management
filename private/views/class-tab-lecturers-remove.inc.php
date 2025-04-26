@@ -1,5 +1,5 @@
 <form action="" method="post" class="form mx-auto">
-    <h3 class="fs-4 mt-2">Add Lecturer</h3>
+    <h3 class="fs-4 mt-2">Remove Lecturer</h3>
     <?php if (count($errors) > 0) : ?>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             <strong>Errors:</strong><?php foreach ($errors as $error) : ?>
