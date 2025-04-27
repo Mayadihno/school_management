@@ -10,12 +10,19 @@ class Profile extends Controller
             $this->redirect('login');
         }
         $user = new User();
-        $data = $user->whereOne('user_id', $id);
+        $datas = $user->whereOne('user_id', $id);
         $crumbs[] = ['Dashboard', ''];
         $crumbs[] = ['Users', 'users'];
-        if ($data) {
-            $crumbs[] = [$data->firstname, 'profile'];
+        if ($datas) {
+            $crumbs[] = [$datas->firstname, 'profile'];
         }
-        $this->view('profile', ['user' => $data, 'crumbs' => $crumbs]);
+        //get more info depending on tab
+        $page_tab = isset($_GET['tab']) ? $_GET['tab'] : 'info';
+
+        $data['page_tab'] =  $page_tab;
+        $data['crumbs'] = $crumbs;
+        $data['user'] = $datas;
+
+        $this->view('profile', $data);
     }
 }

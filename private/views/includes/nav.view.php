@@ -13,9 +13,9 @@
 </style>
 <nav class="navbar navbar-expand-lg bg-body-tertiary p-3">
     <div class="container-fluid">
-        <a class="navbar-brand me-5" href="#">
+        <a class="navbar-brand me-5" href="<?= ROOT ?>">
             <img src="<?= ASSETS ?>/logo.avif" alt="Logo" width="50" height="50" class=" rounded-circle">
-            <span class="" style="font-size: 13px; padding-top: 10px;"><?= Auth::getSchool_name() ?></span>
+            <?= Auth::getSchool_name() ?>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -48,8 +48,8 @@
                         <?= Auth::getFirstname() ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="<?= ROOT ?>profile">Profile</a></li>
-                        <li><a class="dropdown-item" href="<?= ROOT ?>home">Dashboard</a></li>
+                        <li><a class="dropdown-item" href="<?= ROOT ?>profile/<?= Auth::getUser_id() ?>">Profile</a></li>
+                        <li><a class="dropdown-item" href="<?= ROOT ?>">Dashboard</a></li>
                         <div class="dropdown-divider"></div>
                         <li><a class="dropdown-item" href="<?= ROOT ?>logout">Logout</a></li>
                     </ul>

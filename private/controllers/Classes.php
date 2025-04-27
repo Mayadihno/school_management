@@ -10,7 +10,9 @@ class Classes extends Controller
             $this->redirect('login');
         }
         $classes = new Classes_model();
-        $data = $classes->findAll();
+        $school_id =  Auth::getSchool_id();
+        $data =  $classes->query("select * from classes where school_id = :school_id order by date desc", ['school_id' => $school_id]);
+
         $crumbs[] = ['Dashboard', ''];
         $crumbs[] = ['Classes', 'classes'];
         $this->view('classes', ['classes' => $data, 'crumbs' => $crumbs]);

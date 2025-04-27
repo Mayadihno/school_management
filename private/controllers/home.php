@@ -9,8 +9,7 @@ class Home extends Controller
         if (!Auth::authenticated()) {
             $this->redirect('login');
         }
-        $user = new User();
-        $data = $user->findAll();
-        $this->view('home', ['users' => $data]);
+
+        $this->view('home');
     }
 }

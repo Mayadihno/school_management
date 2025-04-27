@@ -50,24 +50,35 @@
         <div class="container-fluid">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Basic Info</a>
+                    <a class="nav-link <?= $page_tab == 'info' ? 'active' : '' ?>" aria-current="page" href="<?= ROOT ?>profile/<?= $user->user_id ?>">Basic Info</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Classes</a>
+                    <a class="nav-link <?= $page_tab == 'classes' ? 'active' : '' ?>" href="<?= ROOT ?>profile/<?= $user->user_id ?>?tab=classes">Classes</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Tests</a>
+                    <a class="nav-link <?= $page_tab == 'tests' ? 'active' : '' ?>" href="<?= ROOT ?>profile/<?= $user->user_id ?>?tab=tests">Tests</a>
                 </li>
 
             </ul>
-            <nav class="navbar bg-body-tertiary">
-                <form class="container-fluid">
-                    <div class="input-group">
-                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-search"></i></span>
-                        <input type="text" class="form-control" placeholder="Serach" aria-label="Search" aria-describedby="basic-addon1">
-                    </div>
-                </form>
-            </nav>
+
+            <?php
+            switch ($page_tab) {
+                case 'info':
+                    include(view_path('profile-tab-info'));
+                    break;
+
+                case 'classes':
+                    include(view_path('profile-tab-classes'));
+                    break;
+                case 'tests':
+                    include(view_path('profile-tab-test'));
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+            ?>
         </div>
     <?php else: ?>
         <div class="text-center ">
