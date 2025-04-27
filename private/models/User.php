@@ -19,6 +19,8 @@ class User extends Model
         'hash_password',
     ];
 
+
+
     public function validate($data)
     {
         $this->errors = array();

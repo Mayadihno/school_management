@@ -13,6 +13,11 @@ class Login extends Controller
             if ($row) {
                 $row = $row[0];
                 if (password_verify($_POST['password'], $row->password)) {
+
+                    $school = new School();
+                    $school_row = $school->whereOne('school_id', $row->school_id);
+                    $row->school_name = $school_row->school;
+
                     Auth::authenticate($row);
                     $this->redirect('home');
                 } else {

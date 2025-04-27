@@ -61,6 +61,9 @@
                 case 'students-add':
                     include(view_path('class-tab-students-add'));
                     break;
+                case 'students-remove':
+                    include(view_path('class-tab-students-remove'));
+                    break;
                 case 'tests':
                     include(view_path('class-tab-tests'));
                     break;
