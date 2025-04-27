@@ -1,4 +1,4 @@
-<h3>Classes</h3>
+<h3>My Classes</h3>
 <nav class="navbar bg-body-tertiary">
     <form class="container-fluid">
         <div class="input-group">
@@ -7,3 +7,8 @@
         </div>
     </form>
 </nav>
+
+
+
+<?php $classes = $student_classes ?>
+<?php include(view_path('classes')) ?>

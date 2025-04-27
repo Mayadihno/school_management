@@ -53,7 +53,7 @@
                     <a class="nav-link <?= $page_tab == 'info' ? 'active' : '' ?>" aria-current="page" href="<?= ROOT ?>profile/<?= $user->user_id ?>">Basic Info</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <?= $page_tab == 'classes' ? 'active' : '' ?>" href="<?= ROOT ?>profile/<?= $user->user_id ?>?tab=classes">Classes</a>
+                    <a class="nav-link <?= $page_tab == 'classes' ? 'active' : '' ?>" href="<?= ROOT ?>profile/<?= $user->user_id ?>?tab=classes">My Classes</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link <?= $page_tab == 'tests' ? 'active' : '' ?>" href="<?= ROOT ?>profile/<?= $user->user_id ?>?tab=tests">Tests</a>

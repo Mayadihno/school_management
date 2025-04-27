@@ -17,9 +17,28 @@ class Profile extends Controller
             $crumbs[] = [$datas->firstname, 'profile'];
         }
         //get more info depending on tab
-        $page_tab = isset($_GET['tab']) ? $_GET['tab'] : 'info';
+        $data['page_tab'] = isset($_GET['tab']) ? $_GET['tab'] : 'info';
 
-        $data['page_tab'] =  $page_tab;
+        if ($data['page_tab'] == 'classes' &&  $datas) {
+            $class = new Classes_model();
+            $my_table = "class_students";
+
+            if ($datas->rank == 'lecturer') {
+                $my_table = "class_lecturers";
+            }
+
+            $query = "select * from $my_table where user_id = :user_id && disabled = 0";
+
+            $data['stud_classes'] = $class->query($query, ['user_id' => $id]);
+
+            $data['student_classes'] = [];
+            if (isset($data['stud_classes']) && !empty($data['stud_classes'])) {
+                foreach ($data['stud_classes'] as $stud_class) {
+                    $data['student_classes'][] = $class->whereOne('id', $stud_class->class_id);
+                }
+            }
+        }
+
         $data['crumbs'] = $crumbs;
         $data['user'] = $datas;
 
