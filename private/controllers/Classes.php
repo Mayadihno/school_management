@@ -26,7 +26,7 @@ class Classes extends Controller
         }
 
         $errors = array();
-        if (count($_POST) > 0) {
+        if (count($_POST) > 0 && Auth::access('lecturer')) {
             $classes = new Classes_model();
             if ($classes->validate($_POST)) {
                 $_POST['date'] = date('Y-m-d H:i:s');
@@ -41,7 +41,11 @@ class Classes extends Controller
         $crumbs[] = ['Classes', 'classes'];
         $crumbs[] = ['Add', 'classes/add'];
 
-        $this->view('classes.add', ['errors' => $errors, 'crumbs' => $crumbs]);
+        if (Auth::access('lecturer')) {
+            $this->view('classes.add', ['errors' => $errors, 'crumbs' => $crumbs]);
+        } else {
+            $this->view('access-denied');
+        }
     }
 
     public function edit($id = null)
@@ -49,9 +53,10 @@ class Classes extends Controller
         if (!Auth::authenticated()) {
             $this->redirect('login');
         }
-        $classes = new Classes_model();;
+        $classes = new Classes_model();
+        $row = $classes->where('id', $id);
         $errors = array();
-        if (count($_POST) > 0) {
+        if (count($_POST) > 0 && Auth::access('lecturer') && Auth::i_own_content($row)) {
             $classes = new Classes_model();
             if ($classes->validate($_POST)) {
                 $classes->update($id, ($_POST));
@@ -65,7 +70,11 @@ class Classes extends Controller
         $crumbs[] = ['Dashboard', ''];
         $crumbs[] = ['classes', 'classes'];
         $crumbs[] = ['Edit', 'classes/edit'];
-        $this->view('classes.edit', ['errors' => $errors, 'classes' => $classes, 'crumbs' => $crumbs]);
+        if (Auth::access('lecturer') && Auth::i_own_content($classes)) {
+            $this->view('classes.edit', ['errors' => $errors, 'classes' => $classes, 'crumbs' => $crumbs]);
+        } else {
+            $this->view('access-denied');
+        }
     }
     public function delete($id)
     {
@@ -73,8 +82,9 @@ class Classes extends Controller
             $this->redirect('login');
         }
         $classes = new Classes_model();
+        $row = $classes->where('id', $id);
         $errors = array();
-        if ($id) {
+        if ($id && Auth::access('lecturer') && Auth::i_own_content($row)) {
             $classes->delete($id);
             $this->redirect('classes');
         } else {
@@ -83,6 +93,10 @@ class Classes extends Controller
 
         $classes = $classes->where('id', $id);
 
-        $this->view('classes.delete', ['errors' => $errors, 'classes' => $classes]);
+        if (Auth::access('lecturer') && Auth::i_own_content($classes)) {
+            $this->view('classes.delete', ['errors' => $errors, 'classes' => $classes]);
+        } else {
+            $this->view('access-denied');
+        }
     }
 }

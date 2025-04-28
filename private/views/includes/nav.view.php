@@ -25,12 +25,18 @@
                 <li class="nav-item">
                     <a class="nav-link active text-uppercase" aria-current="page" href="<?= ROOT ?>">Dashboard</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link text-uppercase" href="<?= ROOT ?>schools">schools</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-uppercase" href="<?= ROOT ?>users">staff</a>
-                </li>
+                <?php if (Auth::access('super-admin')): ?>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase" href="<?= ROOT ?>schools">schools</a>
+                    </li>
+                <?php endif; ?>
+
+                <?php if (Auth::access('admin')): ?>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase" href="<?= ROOT ?>users">staff</a>
+                    </li>
+                <?php endif; ?>
+
                 <li class="nav-item">
                     <a class="nav-link text-uppercase" href="<?= ROOT ?>students">students</a>
                 </li>

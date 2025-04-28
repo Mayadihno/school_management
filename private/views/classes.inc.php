@@ -4,11 +4,14 @@
          <th>Class Name</th>
          <th>Created by</th>
          <th>Date</th>
-         <th>
-             <a href="<?= ROOT ?>classes/add">
-                 <button class="btn btn-sm btn-primary"><i class="fas fa-plus pe-2"></i>Add New</button>
-             </a>
-         </th>
+
+         <?php if (Auth::access('admin')): ?>
+             <th>
+                 <a href="<?= ROOT ?>classes/add">
+                     <button class="btn btn-sm btn-primary"><i class="fas fa-plus pe-2"></i>Add New</button>
+                 </a>
+             </th>
+         <?php endif; ?>
      </tr>
 
      <?php if (isset($classes) && $classes) : ?>
@@ -23,12 +26,14 @@
                  <td><?= $class->user->lastname ?> <?= $class->user->firstname ?> </td>
                  <td><?= get_date($class->date) ?></td>
                  <td>
-                     <a href="<?= ROOT ?>classes/edit/<?= $class->id ?>">
-                         <button class="btn btn-sm btn-primary"><i class="fas fa-edit pe-2"></i>Edit</button>
-                     </a>
-                     <a href="<?= ROOT ?>classes/delete/<?= $class->id ?>">
-                         <button class="btn btn-sm btn-danger"><i class="fas fa-trash pe-2"></i>Delete</button>
-                     </a>
+                     <?php if (Auth::access('lecturer')): ?>
+                         <a href="<?= ROOT ?>classes/edit/<?= $class->id ?>">
+                             <button class="btn btn-sm btn-primary"><i class="fas fa-edit pe-2"></i>Edit</button>
+                         </a>
+                         <a href="<?= ROOT ?>classes/delete/<?= $class->id ?>">
+                             <button class="btn btn-sm btn-danger"><i class="fas fa-trash pe-2"></i>Delete</button>
+                         </a>
+                     <?php endif; ?>
                  </td>
              </tr>
          <?php endforeach; ?>

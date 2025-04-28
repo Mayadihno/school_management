@@ -21,24 +21,30 @@
 </style>
 <div class="container-fluid ps-4 shadow mx-auto" style="max-width: 1000px;">
     <div class="row">
-        <div class="card shadow col-3 rounded m-4 p-2 border">
-            <a href="<?= ROOT ?>schools">
-                <div class="card-header">SCHOOLS</div>
-                <h1 class="text-center">
-                    <i class="fa fa-graduation-cap"></i>
-                </h1>
-                <div class="card-footer">View all schools</div>
-            </a>
-        </div>
-        <div class="card shadow col-3 rounded m-4 p-2 border">
-            <a href="<?= ROOT ?>users">
-                <div class="card-header">STAFF</div>
-                <h1 class="text-center">
-                    <i class="fa fa-chalkboard-teacher"></i>
-                </h1>
-                <div class="card-footer">View all staff members</div>
-            </a>
-        </div>
+        <?php if (Auth::access('super-admin')) : ?>
+            <div class="card shadow col-3 rounded m-4 p-2 border">
+                <a href="<?= ROOT ?>schools">
+                    <div class="card-header">SCHOOLS</div>
+                    <h1 class="text-center">
+                        <i class="fa fa-graduation-cap"></i>
+                    </h1>
+                    <div class="card-footer">View all schools</div>
+                </a>
+            </div>
+        <?php endif; ?>
+
+        <?php if (Auth::access('admin')) : ?>
+            <div class="card shadow col-3 rounded m-4 p-2 border">
+                <a href="<?= ROOT ?>users">
+                    <div class="card-header">STAFF</div>
+                    <h1 class="text-center">
+                        <i class="fa fa-chalkboard-teacher"></i>
+                    </h1>
+                    <div class="card-footer">View all staff members</div>
+                </a>
+            </div>
+        <?php endif; ?>
+
         <div class="card shadow col-3 rounded m-4 p-2 border">
             <a href="<?= ROOT ?>students">
                 <div class="card-header">STUDENTS</div>

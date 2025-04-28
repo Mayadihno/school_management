@@ -6,7 +6,11 @@ class Switch_school extends Controller
     public function index($id = '')
     {
 
-        Auth::switch_school($id);
-        $this->redirect('schools');
+        if (
+            Auth::access('super-admin')
+        ) {
+            Auth::switch_school($id);
+            $this->redirect('schools');
+        }
     }
 }
