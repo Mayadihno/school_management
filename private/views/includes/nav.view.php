@@ -37,9 +37,11 @@
                     </li>
                 <?php endif; ?>
 
-                <li class="nav-item">
-                    <a class="nav-link text-uppercase" href="<?= ROOT ?>students">students</a>
-                </li>
+                <?php if (Auth::access('reception')): ?>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase" href="<?= ROOT ?>students">students</a>
+                    </li>
+                <?php endif; ?>
                 <li class="nav-item">
                     <a class="nav-link text-uppercase" href="<?= ROOT ?>classes">classes</a>
                 </li>

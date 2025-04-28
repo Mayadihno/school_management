@@ -43,17 +43,30 @@
                     <div class="card-footer">View all staff members</div>
                 </a>
             </div>
+            <div class="card shadow col-3 rounded m-4 p-2 border">
+                <a href="<?= ROOT ?>students">
+                    <div class="card-header">STUDENTS</div>
+                    <h1 class="text-center">
+                        <i class="fa fa-user-graduate"></i>
+                    </h1>
+                    <div class="card-footer">View all students</div>
+                </a>
+            </div>
         <?php endif; ?>
 
-        <div class="card shadow col-3 rounded m-4 p-2 border">
-            <a href="<?= ROOT ?>students">
-                <div class="card-header">STUDENTS</div>
-                <h1 class="text-center">
-                    <i class="fa fa-user-graduate"></i>
-                </h1>
-                <div class="card-footer">View all students</div>
-            </a>
-        </div>
+        <?php if (Auth::access('reception')) : ?>
+            <div class="card shadow col-3 rounded m-4 p-2 border">
+                <a href="<?= ROOT ?>students">
+                    <div class="card-header">STUDENTS</div>
+                    <h1 class="text-center">
+                        <i class="fa fa-user-graduate"></i>
+                    </h1>
+                    <div class="card-footer">View all students</div>
+                </a>
+            </div>
+        <?php endif; ?>
+
+
         <div class="card shadow col-3 rounded m-4 p-2 border">
             <a href="<?= ROOT ?>classes">
                 <div class="card-header">CLASSES</div>
@@ -72,15 +85,17 @@
                 <div class="card-footer">View all tests</div>
             </a>
         </div>
-        <div class="card shadow col-3 rounded m-4 p-2 border">
-            <a href="<?= ROOT ?>statistics">
-                <div class="card-header">STATISTICS</div>
-                <h1 class="text-center">
-                    <i class="fa fa-chart-pie"></i>
-                </h1>
-                <div class="card-footer">View all statistics</div>
-            </a>
-        </div>
+        <?php if (Auth::access('admin')) : ?>
+            <div class="card shadow col-3 rounded m-4 p-2 border">
+                <a href="<?= ROOT ?>statistics">
+                    <div class="card-header">STATISTICS</div>
+                    <h1 class="text-center">
+                        <i class="fa fa-chart-pie"></i>
+                    </h1>
+                    <div class="card-footer">View all statistics</div>
+                </a>
+            </div>
+        <?php endif; ?>
         <div class="card shadow col-3 rounded m-4 p-2 border">
             <a href="<?= ROOT ?>profile/<?= Auth::getUser_id() ?>">
                 <div class="card-header">PROFILE</div>
@@ -90,15 +105,17 @@
                 <div class="card-footer">View profile</div>
             </a>
         </div>
-        <div class="card shadow col-3 rounded m-4 p-2 border">
-            <a href="<?= ROOT ?>settings">
-                <div class="card-header">SETTINGS</div>
-                <h1 class="text-center">
-                    <i class="fa fa-cogs"></i>
-                </h1>
-                <div class="card-footer">View all settings</div>
-            </a>
-        </div>
+        <?php if (Auth::access('admin')) : ?>
+            <div class="card shadow col-3 rounded m-4 p-2 border">
+                <a href="<?= ROOT ?>settings">
+                    <div class="card-header">SETTINGS</div>
+                    <h1 class="text-center">
+                        <i class="fa fa-cogs"></i>
+                    </h1>
+                    <div class="card-footer">View all settings</div>
+                </a>
+            </div>
+        <?php endif; ?>
         <div class="card shadow col-3 rounded m-4 p-2 border">
             <a href="<?= ROOT ?>logout">
                 <div class="card-header">LOGOUT</div>

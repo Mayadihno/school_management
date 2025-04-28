@@ -11,6 +11,7 @@ class Profile extends Controller
         }
         $user = new User();
         $datas = $user->whereOne('user_id', $id);
+        $rows = $user->whereOne('user_id', $id);
         $crumbs[] = ['Dashboard', ''];
         $crumbs[] = ['Users', 'users'];
         if ($datas) {
@@ -42,6 +43,11 @@ class Profile extends Controller
         $data['crumbs'] = $crumbs;
         $data['user'] = $datas;
 
-        $this->view('profile', $data);
+
+        if (Auth::access('reception') || Auth::i_own_content($rows)) {
+            $this->view('profile', $data);
+        } else {
+            $this->view('access-denied');
+        }
     }
 }

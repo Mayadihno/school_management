@@ -13,7 +13,7 @@ class Register extends Controller
         $error = array();
         if (count($_POST) > 0) {
             $user = new User();
-            if (Auth::access('admin') && $user->validate($_POST)) {
+            if (Auth::access('reception') && $user->validate($_POST)) {
                 $_POST['date'] = date('Y-m-d H:i:s');
                 if ($_POST['rank'] == 'super-admin' && $_SESSION['USER']->rank != 'super-admin') {
                     $_POST['rank'] == 'admin';
@@ -25,7 +25,7 @@ class Register extends Controller
                 $error = $user->errors;
             }
         }
-        if (Auth::access('admin')) {
+        if (Auth::access('reception')) {
             $this->view('register', ['errors' => $error, 'mode' => $mode]);
         } else {
             $this->view('access-denied');

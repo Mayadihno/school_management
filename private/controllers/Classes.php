@@ -11,7 +11,35 @@ class Classes extends Controller
         }
         $classes = new Classes_model();
         $school_id =  Auth::getSchool_id();
-        $data =  $classes->query("select * from classes where school_id = :school_id order by date desc", ['school_id' => $school_id]);
+        if (Auth::access(('admin'))) {
+            $query = "select * from classes where school_id = :school_id order by date desc";
+            $arr['school_id'] = $school_id;
+            if (isset($_GET['find'])) {
+                $find = '%' . $_GET['find'] . '%';
+                $query = "select * from classes where school_id = :school_id && (class like :find) order by date desc";
+                $arr['find'] = $find;
+            }
+            $data =  $classes->query($query, $arr);
+        } else {
+
+            $class = new Classes_model();
+            $my_table = "class_students";
+
+            if (Auth::getRank() == 'lecturer') {
+                $my_table = "class_lecturers";
+            }
+
+            $query = "select * from $my_table where user_id = :user_id && disabled = 0";
+
+            $arr['stud_classes'] = $class->query($query, ['user_id' => Auth::getUser_id()]);
+
+            $data = [];
+            if (isset($arr['stud_classes']) && !empty($arr['stud_classes'])) {
+                foreach ($arr['stud_classes'] as $stud_class) {
+                    $data[]  = $class->whereOne('id', $stud_class->class_id);
+                }
+            }
+        }
 
         $crumbs[] = ['Dashboard', ''];
         $crumbs[] = ['Classes', 'classes'];
