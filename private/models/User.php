@@ -21,7 +21,7 @@ class User extends Model
 
 
 
-    public function validate($data)
+    public function validate($data, $id = '')
     {
         $this->errors = array();
         //validate firstName
@@ -36,10 +36,17 @@ class User extends Model
         if (empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['email'] = "Email is not valid";
         }
-        //validate email if already exists
-        if ($this->where('email', $data['email'])) {
-            $this->errors['email'] = "Email already exists";
+        if (trim($id) == '') {
+            //validate email if already exists
+            if ($this->where('email', $data['email'])) {
+                $this->errors['email'] = "Email already exists";
+            }
+        } else {
+            if ($this->query("select email from $this->table where email = :email && user_id != id", ['email' => $data['email'], 'id' => $id])) {
+                $this->errors['email'] = "Email already exists";
+            }
         }
+
         //validate gender
         if (empty($data['gender']) || !in_array($data['gender'], array('male', 'female', 'other'))) {
             $this->errors['gender'] = "Select at least one Gender";
@@ -49,8 +56,10 @@ class User extends Model
             $this->errors['rank'] = "Select at least one Rank";
         }
         //validate password
-        if (empty($data['password']) || strlen($data['password']) < 6) {
-            $this->errors['password'] = "Password must be at least 6 characters long";
+        if (isset($data['password'])) {
+            if (empty($data['password']) || strlen($data['password']) < 6) {
+                $this->errors['password'] = "Password must be at least 6 characters long";
+            }
         }
         //validate confirm password
         if (empty($data['confirm-password']) || $data['password'] != $data['confirm-password']) {

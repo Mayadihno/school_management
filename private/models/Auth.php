@@ -100,4 +100,18 @@ class Auth
         }
         return false;
     }
+    public static function myProfile($row)
+    {
+        if (!isset($_SESSION['USER'])) {
+            return false;
+        }
+
+        if (isset($row->user_id)) {
+            if ($_SESSION['USER']->user_id == $row->user_id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

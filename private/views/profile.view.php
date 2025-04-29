@@ -10,6 +10,19 @@
             <div class="col-sm-4 col-md-3">
                 <img src="<?= $image ?>" class="border border-dark d-block mx-auto rounded-circle" alt="" width="150px">
                 <h3 class="text-center pt-2"><?= esc($user->firstname) ?> <?= esc($user->lastname) ?></h3>
+
+                <?php if (Auth::myProfile($user)): ?>
+                    <div class=" d-flex flex-column my-3">
+                        <a href="<?= ROOT ?>profile/edit/<?= $user->user_id ?>" class="btn btn-primary mb-2">
+                            Edit Profile <i class="fa fa-edit"></i>
+                        </a>
+
+                        <a href="<?= ROOT ?>profile/delete/<?= $user->user_id ?>" class="btn btn-danger">
+                            Delete Profile <i class="fa fa-trash"></i>
+                        </a>
+                    </div>
+                <?php endif ?>
+
             </div>
             <div class="col-sm-8 col-md-9 bg-light p-3 rounded shadow">
                 <h4 class="text-center">Personal Information</h4>

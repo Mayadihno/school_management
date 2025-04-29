@@ -50,4 +50,37 @@ class Profile extends Controller
             $this->view('access-denied');
         }
     }
+    public function edit($id = '')
+    {
+        if (!Auth::authenticated()) {
+            $this->redirect('login');
+        }
+        $errors = array();
+        $user = new User();
+        $id =  trim($id == '') ? Auth::getUser_id() : $id;
+
+        if (count($_POST) > 0) {
+            if ($user->validate($_POST, $id)) {
+                if ($_POST['rank'] == 'super-admin' && $_SESSION['USER']->rank != 'super-admin') {
+                    $_POST['rank'] == 'admin';
+                }
+
+                $user->update($id, $_POST);
+                $this->redirect('profile/' . $id);
+            } else {
+                $errors = $user->errors;
+            }
+        }
+        $data = $user->whereOne('user_id', $id);
+        $data = ['user' => $data];
+        $data['errors'] = $errors;
+
+
+
+        if (Auth::myProfile($data) || Auth::access('admin')) {
+            $this->view('profile-edit', $data);
+        } else {
+            $this->view('access-denied');
+        }
+    }
 }

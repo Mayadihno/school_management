@@ -17,17 +17,21 @@ class Single_class extends Controller
         if ($data) {
             $crumbs[] = [$data->class, 'class'];
         }
+        $limit = 2;
+        $pager = new Pager($limit);
+        $offset = $pager->offset;
+
         $lect = new Lecturers_model();
         $results = false;
         $page_tab = isset($_GET['tab']) ? $_GET['tab'] : 'lecturers';
 
         if ($page_tab == 'lecturers') {
-            $query = "select * from class_lecturers where class_id = :class_id && disabled = 0 order by date desc";
+            $query = "select * from class_lecturers where class_id = :class_id && disabled = 0 order by date desc limit $limit offset $offset";
             $lecturers = $lect->query($query, ['class_id' => $id]);
             $datas['lecturers'] = $lecturers;
         } else {
             if ($page_tab == 'students') {
-                $query = "select * from class_students where class_id = :class_id && disabled = 0 order by date desc";
+                $query = "select * from class_students where class_id = :class_id && disabled = 0 order by date desc limit $limit offset $offset";
                 $students = $lect->query($query, ['class_id' => $id]);
                 $datas['students'] = $students;
             }
@@ -39,6 +43,7 @@ class Single_class extends Controller
         $datas['page_tab'] = $page_tab;
         $datas['results'] = $results;
         $datas['errors'] = $errors;
+        $datas['pager'] = $pager;
 
         $this->view('single-class', $datas);
     }
@@ -72,9 +77,9 @@ class Single_class extends Controller
                 }
             } else {
                 if (isset($_POST['selected'])) {
-                    $query = "select id from class_lecturers where class_id = :class_id && user_id = :user_id && disabled = 0 limit 1";
+                    $query = "select disabled,id from class_lecturers where class_id = :class_id && user_id = :user_id limit 1";
 
-                    if (!$lect->query($query, ['class_id' => $id, 'user_id' => $_POST['selected']])) {
+                    if (!$check = $lect->query($query, ['class_id' => $id, 'user_id' => $_POST['selected']])) {
                         $arr = array();
                         $arr['class_id'] = $id;
                         $arr['user_id'] = $_POST['selected'];
@@ -84,6 +89,17 @@ class Single_class extends Controller
 
                         $this->redirect('single_class/' . $id . '?tab=lecturers');
                     } else {
+                        //check if he is active
+                        if (isset($check[0]->disabled)) {
+                            if ($check[0]->disabled) {
+                                $arr = array();
+                                $arr['disabled'] = 0;
+                                $lect->update($check[0]->id, $arr);
+                                $this->redirect('single_class/' . $id . '?tab=lecturers');
+                            }
+                        } else {
+                            $errors[] = 'Lecturer already added';
+                        }
                         $errors[] = 'Lecturer already added';
                     }
                 }
@@ -128,9 +144,9 @@ class Single_class extends Controller
                 }
             } else {
                 if (isset($_POST['selected'])) {
-                    $query = "select id from class_students where class_id = :class_id && user_id = :user_id && disabled = 0 limit 1";
+                    $query = "select disabled,id from class_students where class_id = :class_id && user_id = :user_id limit 1";
 
-                    if (!$stud->query($query, ['class_id' => $id, 'user_id' => $_POST['selected']])) {
+                    if (!$check = $stud->query($query, ['class_id' => $id, 'user_id' => $_POST['selected']])) {
                         $arr = array();
                         $arr['class_id'] = $id;
                         $arr['user_id'] = $_POST['selected'];
@@ -140,6 +156,17 @@ class Single_class extends Controller
 
                         $this->redirect('single_class/' . $id . '?tab=students');
                     } else {
+                        //check if he is active
+                        if (isset($check[0]->disabled)) {
+                            if ($check[0]->disabled) {
+                                $arr = array();
+                                $arr['disabled'] = 0;
+                                $stud->update($check[0]->id, $arr);
+                                $this->redirect('single_class/' . $id . '?tab=students');
+                            }
+                        } else {
+                            $errors[] = 'Student already added';
+                        }
                         $errors[] = 'Student already added';
                     }
                 }
