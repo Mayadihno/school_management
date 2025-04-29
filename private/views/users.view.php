@@ -29,7 +29,7 @@
         <?php endif; ?>
     </div>
 
-
+    <?php $pager->display() ?>
 </div>
 
 

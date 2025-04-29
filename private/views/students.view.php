@@ -30,6 +30,10 @@
     </div>
 
 
+
+    <?php $pager->display() ?>
+
+
 </div>
 
 
