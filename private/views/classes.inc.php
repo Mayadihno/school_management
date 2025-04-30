@@ -38,8 +38,12 @@
              </tr>
          <?php endforeach; ?>
      <?php else : ?>
-         <div class="alert alert-danger" role="alert">
-             No class found at this time
-         </div>
+         <tr>
+             <td colspan="5">
+                 <center class="alert alert-danger" role="alert">
+                     No class found at this time
+                 </center>
+             </td>
+         </tr>
      <?php endif; ?>
  </table>

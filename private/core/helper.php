@@ -54,7 +54,8 @@ function get_image($image, $gender = '')
             $image = ASSETS . 'male-icon.png';
         }
     } else {
-        $image = ROOT . $image;
+        $class_image = new Image();
+        $image = ROOT . $class_image->profile_thumbnail($image);
     }
     return $image;
 }
