@@ -9,21 +9,24 @@
             Back to profile
         </a>
         <h4 class="text-center">Edit Profile</h4>
-        <div class="row my-3">
+        <form method="post" class="row my-3" enctype="multipart/form-data">
             <div class="col-sm-4 col-md-3">
                 <img src="<?= $image ?>" class="border d-block mt-3 mx-auto" alt="" width="180px">
 
                 <?php if (Auth::myProfile($user)): ?>
                     <div class=" d-flex flex-column my-3">
-                        <a href="<?= ROOT ?>profile/edit/<?= $user->user_id ?>" class="btn btn-info text-white mb-2">
+                        <label for="image-browse" class="btn btn-info text-white mb-2">
+                            <input onchange="display_image_name(this.files[0].name)" type="file" name="image" id="image-browse" style="display: none;">
                             Browse Image <i class="fa fa-image"></i>
-                        </a>
+                        </label>
+                        <!-- <br> -->
+                        <small class="file_info text-muted"></small>
                     </div>
                 <?php endif ?>
 
             </div>
             <div class="col-sm-8 col-md-9 bg-light p-3 rounded shadow">
-                <form method="post" class="mx-auto" style="max-width: 600px;">
+                <div class="mx-auto" style="max-width: 600px;">
                     <input type="text" value="<?= get_value('firstname', $user->firstname) ?>" name="firstname" placeholder="First Name" class="form-control mb-1">
                     <?php if ($form_submitted && !empty($errors['firstname'])) : ?>
                         <small class="text-danger"><?= $errors['firstname'] ?></small>
@@ -81,9 +84,9 @@
                         </a>
                         <button type="submit" class="btn btn-success">Save Changes</button>
                     </div>
-                </form>
+                </div>
             </div>
-        </div>
+        </form>
 
     <?php else: ?>
         <div class="text-center ">
@@ -94,4 +97,9 @@
     <?php endif; ?>
 </div>
 
+<script>
+    function display_image_name(file_name) {
+        document.querySelector('.file_info').innerHTML = file_name;
+    }
+</script>
 <?php $this->view('includes/footer'); ?>

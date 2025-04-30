@@ -12,6 +12,7 @@ class User extends Model
         'password',
         'rank',
         'date',
+        'image',
     ];
     protected $beforeInsert = [
         'make_user_id',

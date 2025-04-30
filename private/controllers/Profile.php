@@ -59,11 +59,28 @@ class Profile extends Controller
         $user = new User();
         $id =  trim($id == '') ? Auth::getUser_id() : $id;
 
+
         if (count($_POST) > 0) {
             if ($user->validate($_POST, $id)) {
                 $user->hash_password($_POST);
                 unset($_POST['password']);
                 unset($_POST['confirm-password']);
+
+                $alllowed_ext = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
+
+                if (count($_FILES) > 0 && $_FILES['image']['name'] != '') {
+                    if ($_FILES['image']['error'] == 0 && in_array($_FILES['image']['type'], $alllowed_ext)) {
+                        $folder = 'uploads/';
+                        if (!file_exists($folder)) {
+                            mkdir($folder, 0777, true);
+                        }
+                        $destination = $folder . $_FILES['image']['name'];
+                        move_uploaded_file($_FILES['image']['tmp_name'], $destination);
+                        $_POST['image'] = $destination;
+                    }
+                }
+
+
                 $myRow = $user->whereOne('user_id', $id);
 
                 if ($_POST['rank'] == 'super-admin' && $_SESSION['USER']->rank != 'super-admin') {

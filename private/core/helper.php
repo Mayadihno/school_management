@@ -53,6 +53,8 @@ function get_image($image, $gender = '')
         if ($gender == 'male') {
             $image = ASSETS . 'male-icon.png';
         }
+    } else {
+        $image = ROOT . $image;
     }
     return $image;
 }
