@@ -61,16 +61,26 @@ class Profile extends Controller
 
         if (count($_POST) > 0) {
             if ($user->validate($_POST, $id)) {
+                $user->hash_password($_POST);
+                unset($_POST['password']);
+                unset($_POST['confirm-password']);
+                $myRow = $user->whereOne('user_id', $id);
+
                 if ($_POST['rank'] == 'super-admin' && $_SESSION['USER']->rank != 'super-admin') {
-                    $_POST['rank'] == 'admin';
+                    $_POST['rank'] = 'admin';
                 }
 
-                $user->update($id, $_POST);
-                $this->redirect('profile/' . $id);
+                if (is_object($myRow)) {
+                    $user->update($myRow->id, $_POST);
+                    $this->redirect('profile/' . $id);
+                }
             } else {
+                // Validation failed
                 $errors = $user->errors;
+                // show($errors); // 🔍 Show validation errors
             }
         }
+
         $data = $user->whereOne('user_id', $id);
         $data = ['user' => $data];
         $data['errors'] = $errors;

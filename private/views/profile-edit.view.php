@@ -68,6 +68,10 @@
                     <?php if ($form_submitted && !empty($errors['password'])) : ?>
                         <small class="text-danger"><?= $errors['password'] ?></small>
                     <?php endif; ?>
+                    <input type="password" value="<?= get_value('confirm-password') ?>" name="confirm-password" placeholder="Confirm Password" class="form-control mb-1">
+                    <?php if ($form_submitted && !empty($errors['confirm-password'])) : ?>
+                        <small class="text-danger"><?= $errors['confirm-password'] ?></small>
+                    <?php endif; ?>
 
                     <div class="d-flex justify-content-between align-items-center mt-4">
                         <a href="<?= ROOT ?>profile/<?= $user->user_id ?>">

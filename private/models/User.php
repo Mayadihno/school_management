@@ -37,15 +37,23 @@ class User extends Model
             $this->errors['email'] = "Email is not valid";
         }
         if (trim($id) == '') {
-            //validate email if already exists
+            // Creating a new user
             if ($this->where('email', $data['email'])) {
                 $this->errors['email'] = "Email already exists";
             }
         } else {
-            if ($this->query("select email from $this->table where email = :email && user_id != id", ['email' => $data['email'], 'id' => $id])) {
-                $this->errors['email'] = "Email already exists";
+            // Updating existing user
+            $query = "SELECT email FROM $this->table WHERE email = :email AND user_id != :user_id";
+            $result = $this->query($query, [
+                'email' => $data['email'],
+                'user_id' => $id
+            ]);
+
+            if ($result) {
+                $this->errors['email'] = "Email already exists in database";
             }
         }
+
 
         //validate gender
         if (empty($data['gender']) || !in_array($data['gender'], array('male', 'female', 'other'))) {
@@ -56,15 +64,28 @@ class User extends Model
             $this->errors['rank'] = "Select at least one Rank";
         }
         //validate password
-        if (isset($data['password'])) {
-            if (empty($data['password']) || strlen($data['password']) < 6) {
-                $this->errors['password'] = "Password must be at least 6 characters long";
+        // Always verify current password first
+        if (empty($data['password'])) {
+            $this->errors['password'] = " password is required";
+        } else {
+            $user = $this->whereOne('user_id', $id);
+            if ($user && !password_verify($data['password'], $user->password)) {
+                $this->errors['password'] = " password is incorrect";
             }
         }
-        //validate confirm password
-        if (empty($data['confirm-password']) || $data['password'] != $data['confirm-password']) {
-            $this->errors['confirm-password'] = "Passwords do not match";
+
+        // If user is updating password, validate it
+        if (!empty($data['password'])) {
+            if (strlen($data['password']) < 6) {
+                $this->errors['password'] = "Password must be at least 6 characters long";
+            }
+
+            if (empty($data['confirm-password']) || $data['password'] !== $data['confirm-password']) {
+                $this->errors['confirm-password'] = "Passwords do not match";
+            }
         }
+
+
 
         if (count($this->errors) == 0) {
             return true;
