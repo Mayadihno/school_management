@@ -29,12 +29,14 @@ class Single_class extends Controller
             $query = "select * from class_lecturers where class_id = :class_id && disabled = 0 order by date desc limit $limit offset $offset";
             $lecturers = $lect->query($query, ['class_id' => $id]);
             $datas['lecturers'] = $lecturers;
-        } else {
-            if ($page_tab == 'students') {
-                $query = "select * from class_students where class_id = :class_id && disabled = 0 order by date desc limit $limit offset $offset";
-                $students = $lect->query($query, ['class_id' => $id]);
-                $datas['students'] = $students;
-            }
+        } else if ($page_tab == 'students') {
+            $query = "select * from class_students where class_id = :class_id && disabled = 0 order by date desc limit $limit offset $offset";
+            $students = $lect->query($query, ['class_id' => $id]);
+            $datas['students'] = $students;
+        } else if ($page_tab == 'tests') {
+            $query = "select * from tests where class_id = :class_id order by date desc limit $limit offset $offset";
+            $tests = $lect->query($query, ['class_id' => $id]);
+            $datas['tests'] = $tests;
         }
 
 
@@ -278,6 +280,97 @@ class Single_class extends Controller
         }
 
         $datas['class'] = $data;
+        $datas['crumbs'] = $crumbs;
+        $datas['page_tab'] = $page_tab;
+        $datas['results'] = $results;
+        $datas['errors'] = $errors;
+
+
+        $this->view('single-class', $datas);
+    }
+
+    public function testadd($id = '')
+    {
+        if (!Auth::authenticated()) {
+            $this->redirect('login');
+        }
+        $errors = array();
+        $class = new Classes_model;
+        $data = $class->whereOne('id', $id);
+
+        $crumbs[] = ['Dashboard', ''];
+        $crumbs[] = ['Tests', 'tests'];
+
+        if ($data) {
+            $crumbs[] = [$data->class, 'class'];
+        }
+
+        $test_class = new Tests_model();
+        $results = false;
+        $page_tab = 'test-add';
+
+        if (count($_POST) > 0) {
+            if (isset($_POST['test'])) {
+                // show($_POST);
+                $arr = array();
+                $arr['class_id'] = $id;
+                $arr['test'] = $_POST['test'];
+                $arr['description'] = $_POST['description'];
+                $arr['disabled'] = 0;
+                $arr['date'] = date('Y-m-d H:i:s');
+                $test_class->insert($arr);
+                $this->redirect('single_class/' . $id . '?tab=tests');
+            }
+        }
+
+        $datas['class'] = $data;
+        $datas['crumbs'] = $crumbs;
+        $datas['page_tab'] = $page_tab;
+        $datas['results'] = $results;
+        $datas['errors'] = $errors;
+
+
+        $this->view('single-class', $datas);
+    }
+
+    public function testedit($id = '', $test_id = '')
+    {
+        if (!Auth::authenticated()) {
+            $this->redirect('login');
+        }
+        $errors = array();
+        $class = new Classes_model;
+        $test = new Tests_model();
+        $data = $class->whereOne('id', $id);
+        $test_row = $test->whereOne('test_id', $test_id);
+
+        $crumbs[] = ['Dashboard', ''];
+        $crumbs[] = ['Tests', 'tests'];
+
+        if ($data) {
+            $crumbs[] = [$data->class, 'class'];
+        }
+
+        $test_class = new Tests_model();
+        $results = false;
+        $page_tab = 'test-edit';
+
+        if (count($_POST) > 0) {
+            if (isset($_POST['test'])) {
+                if ($test_class->validate($_POST)) {
+                    $arr = array();
+                    $arr['test'] = $_POST['test'];
+                    $arr['description'] = $_POST['description'];
+                    $arr['disabled'] = $_POST['disabled'];
+                    $test_class->update($test_row->id, $arr);
+                    $this->redirect('single_class/testedit/' . $id . '/' . $test_id . '?tab=test-edit');
+                }
+            }
+        }
+
+
+        $datas['class'] = $data;
+        $datas['test'] = $test_row;
         $datas['crumbs'] = $crumbs;
         $datas['page_tab'] = $page_tab;
         $datas['results'] = $results;

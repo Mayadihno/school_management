@@ -9,6 +9,8 @@ class Tests_model extends Model
         'test',
         'date',
         'class_id',
+        'description',
+        'disabled',
     ];
     protected $beforeInsert = [
         'make_user_id',

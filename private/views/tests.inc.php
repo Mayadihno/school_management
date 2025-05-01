@@ -22,7 +22,7 @@
                          <button class="btn btn-primary btn-sm"><i class="fa fa-chevron-right"></i></button>
                      </a>
                  </td>
-                 <td><?= $test->class ?></td>
+                 <td><?= $test->test ?></td>
                  <td><?= $test->user->lastname ?> <?= $test->user->firstname ?> </td>
                  <td><?= get_date($test->date) ?></td>
                  <td>

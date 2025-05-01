@@ -67,8 +67,14 @@
                 case 'tests':
                     include(view_path('class-tab-tests'));
                     break;
-                case 'tests-add':
-                    include(view_path('class-tab-tests-add'));
+                case 'test-add':
+                    include(view_path('class-tab-test-add'));
+                    break;
+                case 'test-edit':
+                    include(view_path('class-tab-test-edit'));
+                    break;
+                case 'test-remove':
+                    include(view_path('class-tab-test-remove'));
                     break;
 
                 default:
