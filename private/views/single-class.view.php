@@ -73,8 +73,8 @@
                 case 'test-edit':
                     include(view_path('class-tab-test-edit'));
                     break;
-                case 'test-remove':
-                    include(view_path('class-tab-test-remove'));
+                case 'test-delete':
+                    include(view_path('class-tab-test-delete'));
                     break;
 
                 default:

@@ -31,7 +31,7 @@
          <?php foreach ($tests as $test) : ?>
              <tr>
                  <td>
-                     <a href="<?= ROOT ?>single_class/<?= $test->id ?>">
+                     <a href="<?= ROOT ?>single_test/<?= $test->id ?>">
                          <button class="btn btn-primary btn-sm"><i class="fa fa-chevron-right"></i></button>
                      </a>
                  </td>
