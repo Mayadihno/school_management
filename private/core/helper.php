@@ -32,11 +32,15 @@ function make_uniqueid()
 }
 
 
-function get_date($date,)
+function get_date($date)
 {
     return date("jS M, Y", strtotime($date));
 }
 
+function get_date2($date)
+{
+    return date("F jS, Y H:i:s a", strtotime($date));
+}
 
 function show($data)
 {

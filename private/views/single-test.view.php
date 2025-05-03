@@ -7,7 +7,12 @@
         <h4 class="">Test Profile</h4>
         <div class="row my-3">
             <div class="col-sm-12 col-md-12 bg-light p-3 rounded shadow">
-                <h4 class="text-center"><?= esc(ucwords($test->test)) ?></h4>
+                <div class=" d-flex justify-content-evenly align-items-center mb-2">
+                    <h4 class="text-center"><?= esc(ucwords($test->test)) ?></h4>
+                    <a href="<?= ROOT ?>single_class/<?= $test->class_id ?>?tab=tests">
+                        <button class="btn btn-sm btn-primary"><i class="fas fa-chevron-right pe-2"></i>View Class</button>
+                    </a>
+                </div>
                 <table class="table table-hover table-bordered table-striped">
                     <tr>
                         <th>Test Name:
@@ -24,6 +29,16 @@
                         <td><?= esc(get_date($test->date)) ?></td>
                         </th>
                     </tr>
+                    <tr>
+                        <td>
+                            <strong>Test Status:</strong> <?= $test->disabled == 0 ? 'Active' : 'Inactive' ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">
+                            <strong>Test Description:</strong> <?= esc($test->description) ?>
+                        </td>
+                    </tr>
                 </table>
             </div>
         </div>
@@ -36,6 +51,15 @@
                     break;
                 case 'add':
                     include(view_path('test-tab-add'));
+                    break;
+                case 'add-objective':
+                    include(view_path('test-tab-objective'));
+                    break;
+                case 'add-subjective':
+                    include(view_path('test-tab-add-subjective'));
+                    break;
+                case 'add-multiple':
+                    include(view_path('test-tab-multiple'));
                     break;
                 case 'edit':
                     include(view_path('test-tab-edit'));

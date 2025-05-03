@@ -10,6 +10,7 @@ class Single_test extends Controller
         }
         $errors = array();
         $tests = new Tests_model;
+        $question = new Question_model;
         $data = $tests->whereOne('id', $id);
         $crumbs[] = ['Dashboard', ''];
         $crumbs[] = ['Tests', 'tests'];
@@ -20,9 +21,63 @@ class Single_test extends Controller
         $limit = 2;
         $pager = new Pager($limit);
         $offset = $pager->offset;
-        $page_tab = isset($_GET['tab']) ? $_GET['tab'] : 'view';
+        $page_tab = 'view';
+
+        $testss = $tests->where('id', $id);
+        $questions = $question->where('test_id', $testss[0]->test_id, 'asc',);
 
         $results = false;
+
+
+        $datas['test'] = $data;
+        $datas['questions'] = $questions;
+        $datas['crumbs'] = $crumbs;
+        $datas['results'] = $results;
+        $datas['errors'] = $errors;
+        $datas['page_tab'] = $page_tab;
+        $datas['pager'] = $pager;
+
+        $this->view('single-test', $datas);
+    }
+
+    public function addsubjective($id = '')
+    {
+        if (!Auth::authenticated()) {
+            $this->redirect('login');
+        }
+        $errors = array();
+        $tests = new Tests_model;
+        $data = $tests->whereOne('test_id', $id);
+        $row = $tests->whereOne('test_id', $id);
+        $crumbs[] = ['Dashboard', ''];
+        $crumbs[] = ['Tests', 'tests'];
+        if ($data) {
+            $crumbs[] = [$data->test, 'tests'];
+        }
+
+        $limit = 2;
+        $pager = new Pager($limit);
+        $offset = $pager->offset;
+        $page_tab = 'add-subjective';
+        $question = new Question_model;
+
+        if (count($_POST) > 0) {
+
+            $data = $_POST;
+            $data['test_id'] = $id;
+            if ($question->validate($data)) {
+                $data['date'] = date('Y-m-d H:i:s');
+                $data['question_type'] = 'subjective';
+
+                $question->insert($data);
+                $this->redirect('single_test/' . $row->id . '?tab=view');
+            } else {
+                $errors  = "Unable to add question, please try again later";;
+            }
+        }
+
+        $results = false;
+
 
         $datas['test'] = $data;
         $datas['crumbs'] = $crumbs;

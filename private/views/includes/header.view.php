@@ -7,6 +7,12 @@
     <title>Home</title>
     <link rel="stylesheet" type="text/css" href="<?= ROOT; ?>assets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="<?= ROOT; ?>assets/all.min.css">
+
+    <style>
+        a {
+            text-decoration: none !important;
+        }
+    </style>
 </head>
 
 <body>
