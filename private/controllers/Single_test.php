@@ -80,7 +80,12 @@ class Single_test extends Controller
 
 
                 $data['date'] = date('Y-m-d H:i:s');
-                $data['question_type'] = 'subjective';
+
+                if (isset($_GET['type']) && $_GET['type'] == 'objective') {
+                    $data['question_type'] = 'objective';
+                } else {
+                    $data['question_type'] = 'subjective';
+                }
 
 
 
@@ -95,6 +100,58 @@ class Single_test extends Controller
 
 
         $datas['test'] = $data;
+        $datas['crumbs'] = $crumbs;
+        $datas['results'] = $results;
+        $datas['errors'] = $errors;
+        $datas['page_tab'] = $page_tab;
+        $datas['pager'] = $pager;
+
+        $this->view('single-test', $datas);
+    }
+
+    public function editquestion($id = '', $question_id = '')
+    {
+        if (!Auth::authenticated()) {
+            $this->redirect('login');
+        }
+        $errors = array();
+        $tests = new Tests_model;
+        $data = $tests->whereOne('test_id', $id);
+        $row = $tests->whereOne('test_id', $id);
+        $crumbs[] = ['Dashboard', ''];
+        $crumbs[] = ['Tests', 'tests'];
+        if ($data) {
+            $crumbs[] = [$data->test, 'tests'];
+        }
+        $limit = 2;
+        $pager = new Pager($limit);
+        $offset = $pager->offset;
+        $page_tab = 'edit-question';
+        $question = new Question_model;
+        $quest = $question->whereOne('id', $question_id);
+
+
+        if (count($_POST) > 0) {
+
+            $data = $_POST;
+            if ($question->validate($data)) {
+
+                if ($myImage = upload_images($_FILES)) {
+                    $data['image'] = $myImage;
+                }
+
+                $question->update($id, $data);
+                $this->redirect('single_test/editquestion/' . $row->id . '?tab=view');
+            } else {
+                $errors  = "Unable to add question, please try again later";;
+            }
+        }
+
+        $results = false;
+
+
+        $datas['test'] = $data;
+        $datas['quest'] = $quest;
         $datas['crumbs'] = $crumbs;
         $datas['results'] = $results;
         $datas['errors'] = $errors;

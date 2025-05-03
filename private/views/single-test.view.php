@@ -61,8 +61,8 @@
                 case 'add-multiple':
                     include(view_path('test-tab-multiple'));
                     break;
-                case 'edit':
-                    include(view_path('test-tab-edit'));
+                case 'edit-question':
+                    include(view_path('test-tab-edit-subjective'));
                     break;
                 case 'delete':
                     include(view_path('test-tab-delete'));

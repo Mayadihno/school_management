@@ -29,6 +29,12 @@ class Question_model extends Model
         if (empty($data['question'])) {
             $this->errors['question'] = "Please add a valid question";
         }
+
+        if (isset($data['correct_answer'])) {
+            if (empty($data['correct_answer'])) {
+                $this->errors['correct_answer'] = "Please add an answer";
+            }
+        }
         if (count($this->errors) == 0) {
             return true;
         }

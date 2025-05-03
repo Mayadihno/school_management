@@ -1,15 +1,18 @@
 <center>
-    <h5>Add Test Questions</h5>
+    <h5>Edit Test Questions</h5>
 </center>
+
 
 <form method="post" enctype="multipart/form-data">
     <div class="mb-3">
         <label for="question" class="form-label">Question</label>
-        <textarea placeholder="Enter Question" value="<?= get_value('question') ?>" class="form-control" id="question" name="question" rows="3"></textarea>
+        <textarea placeholder="Enter Question" class="form-control" id="question" name="question" rows="3">
+            <?= get_value('question', $quest->question) ?>
+        </textarea>
 
         <div class="input-group mb-3 pt-3">
             <label class="input-group-text " for="inputGroupFile01">Comment (Optional)</label>
-            <input type="text" value="<?= get_value('comment') ?>" class="form-control" name="comment" placeholder="Comment" id="inputGroupFile01">
+            <input type="text" value="<?= get_value('comment', $quest->comment) ?>" class="form-control" name="comment" placeholder="Comment" id="inputGroupFile01">
         </div>
 
     </div>
@@ -22,7 +25,7 @@
     <?php if (isset($_GET['type']) && $_GET['type'] == 'objective'): ?>
         <div class="input-group mb-3 pt-3">
             <label class="input-group-text" for="inputGroupFile01">Answer</label>
-            <input type="text" value="<?= get_value('correct_answer') ?>" name="correct_answer" class="form-control" id="inputGroupFile01" placeholder="Enter Answer">
+            <input type="text" value="<?= get_value('correct_answer', $quest->correct_answer) ?>" name="correct_answer" class="form-control" id="inputGroupFile01" placeholder="Enter Answer">
         </div>
     <?php endif; ?>
 

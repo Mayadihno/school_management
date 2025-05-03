@@ -40,12 +40,16 @@
                 <?php if ($question->image) : ?>
                     <img src="<?= ROOT . $question->image ?>" class="img-fluid rounded-start w-50" alt="...">
                 <?php endif; ?>
+                <?php $type  = '' ?>
+                <?php if ($question->question_type == 'objective') : $type = '?type=objective' ?>
+                    <p class="card-text"><strong>Answer:</strong> <?= esc($question->correct_answer) ?></p>
+                <?php endif; ?>
             </div>
-            <div class="card-footer text-body-secondary">
-                <?= get_date2($question->date) ?> <br>
-                <div class="float-end mt-2">
-                    <a href="<?= ROOT ?>single_test/editquestion/<?= $question->id ?>/<?= $test->test_id ?>" class="btn btn-sm btn-primary"><i class="fas fa-edit pe-2"></i>Edit</a>
-                    <a href="<?= ROOT ?>single_test/deletequestion/<?= $question->id ?>/<?= $test->test_id ?>" class="btn btn-sm btn-danger"><i class="fas fa-trash pe-2"></i>Delete</a>
+            <div class="card-footer text-body-secondary justify-content-between d-flex align-items-center">
+                <?= get_date2($question->date) ?>
+                <div class="float-end">
+                    <a href="<?= ROOT ?>single_test/editquestion/<?= $test->test_id ?>/<?= $question->id ?><?= $type ?>" class="btn btn-sm btn-primary"><i class="fas fa-edit pe-2"></i>Edit</a>
+                    <a href="<?= ROOT ?>single_test/deletequestion/<?= $test->test_id ?>/<?= $question->id ?><?= $type ?>" class="btn btn-sm btn-danger"><i class="fas fa-trash pe-2"></i>Delete</a>
                 </div>
             </div>
         </div>
