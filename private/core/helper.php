@@ -73,3 +73,22 @@ function view_path($view)
         return __DIR__ . '/../views/notFound.view.php';
     }
 }
+
+
+function upload_images($FILES)
+{
+    $alllowed_ext = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
+
+    if (count($FILES) > 0 && $FILES['image']['name'] != '') {
+        if ($FILES['image']['error'] == 0 && in_array($FILES['image']['type'], $alllowed_ext)) {
+            $folder = 'uploads/';
+            if (!file_exists($folder)) {
+                mkdir($folder, 0777, true);
+            }
+            $destination = $folder . time() . '_' . $FILES['image']['name'];
+            move_uploaded_file($FILES['image']['tmp_name'], $destination);
+            return $destination;
+        }
+    }
+    return false;
+}

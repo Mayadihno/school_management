@@ -24,7 +24,13 @@ class Single_test extends Controller
         $page_tab = 'view';
 
         $testss = $tests->where('id', $id);
-        $questions = $question->where('test_id', $testss[0]->test_id, 'asc',);
+        $questions = $question->where('test_id', $testss[0]->test_id,);
+        $total_questions = 0;
+        if (isset($questions) && !empty($questions)) {
+            foreach ($questions as $question) {
+                $total_questions++;
+            }
+        }
 
         $results = false;
 
@@ -35,6 +41,7 @@ class Single_test extends Controller
         $datas['results'] = $results;
         $datas['errors'] = $errors;
         $datas['page_tab'] = $page_tab;
+        $datas['total_questions'] = $total_questions;
         $datas['pager'] = $pager;
 
         $this->view('single-test', $datas);
@@ -66,8 +73,16 @@ class Single_test extends Controller
             $data = $_POST;
             $data['test_id'] = $id;
             if ($question->validate($data)) {
+
+                if ($myImage = upload_images($_FILES)) {
+                    $data['image'] = $myImage;
+                }
+
+
                 $data['date'] = date('Y-m-d H:i:s');
                 $data['question_type'] = 'subjective';
+
+
 
                 $question->insert($data);
                 $this->redirect('single_test/' . $row->id . '?tab=view');

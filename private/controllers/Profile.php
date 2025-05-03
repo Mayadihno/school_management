@@ -66,18 +66,12 @@ class Profile extends Controller
                 unset($_POST['password']);
                 unset($_POST['confirm-password']);
 
-                $alllowed_ext = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
 
-                if (count($_FILES) > 0 && $_FILES['image']['name'] != '') {
-                    if ($_FILES['image']['error'] == 0 && in_array($_FILES['image']['type'], $alllowed_ext)) {
-                        $folder = 'uploads/';
-                        if (!file_exists($folder)) {
-                            mkdir($folder, 0777, true);
-                        }
-                        $destination = $folder . $_FILES['image']['name'];
-                        move_uploaded_file($_FILES['image']['tmp_name'], $destination);
-                        $_POST['image'] = $destination;
-                    }
+                $myImage = upload_images($_FILES);
+                if ($myImage) {
+                    $_POST['image'] = $myImage;
+                } else {
+                    unset($_POST['image']);
                 }
 
 

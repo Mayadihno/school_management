@@ -13,6 +13,7 @@ class Question_model extends Model
         'image',
         'correct_answer',
         'choices',
+        'comment',
     ];
     protected $beforeInsert = [
         'make_user_id',
