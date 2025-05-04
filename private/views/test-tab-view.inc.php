@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg d-flex justify-content-between navbar-light bg-light">
     <center class="">
-        <h5>Test Questions</h5>
+        <h5>Add Test Questions</h5>
     </center>
     <h5>Total Questions: <?= $total_questions ?></h5>
     <div class="btn-group">
@@ -8,15 +8,15 @@
             <i class='fa fa-bars'></i> Add
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="<?= ROOT ?>single_test/addmultiple/<?= $test->test_id ?>">Add Multiple Choice Question</a></li>
+            <li><a class="dropdown-item" href="<?= ROOT ?>single_test/addquestion/<?= $test->test_id ?>">Add Multiple Choice Question</a></li>
             <li>
                 <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" href="<?= ROOT ?>single_test/addsubjective/<?= $test->test_id ?>?type=objective">Add Objective Question</a></li>
+            <li><a class="dropdown-item" href="<?= ROOT ?>single_test/addquestion/<?= $test->test_id ?>?type=objective">Add Objective Question</a></li>
             <li>
                 <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" href="<?= ROOT ?>single_test/addsubjective/<?= $test->test_id ?>">Add Subjective Question</a></li>
+            <li><a class="dropdown-item" href="<?= ROOT ?>single_test/addquestion/<?= $test->test_id ?>">Add Subjective Question</a></li>
         </ul>
     </div>
 </nav>

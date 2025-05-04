@@ -49,20 +49,11 @@
                 case 'view':
                     include(view_path('test-tab-view'));
                     break;
-                case 'add':
-                    include(view_path('test-tab-add'));
-                    break;
-                case 'add-objective':
-                    include(view_path('test-tab-objective'));
-                    break;
-                case 'add-subjective':
-                    include(view_path('test-tab-add-subjective'));
-                    break;
-                case 'add-multiple':
-                    include(view_path('test-tab-multiple'));
+                case 'add-question':
+                    include(view_path('test-tab-add-question'));
                     break;
                 case 'edit-question':
-                    include(view_path('test-tab-edit-subjective'));
+                    include(view_path('test-tab-edit-question'));
                     break;
                 case 'delete':
                     include(view_path('test-tab-delete'));

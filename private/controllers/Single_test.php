@@ -47,7 +47,7 @@ class Single_test extends Controller
         $this->view('single-test', $datas);
     }
 
-    public function addsubjective($id = '')
+    public function addquestion($id = '')
     {
         if (!Auth::authenticated()) {
             $this->redirect('login');
@@ -65,7 +65,7 @@ class Single_test extends Controller
         $limit = 2;
         $pager = new Pager($limit);
         $offset = $pager->offset;
-        $page_tab = 'add-subjective';
+        $page_tab = 'add-question';
         $question = new Question_model;
 
         if (count($_POST) > 0) {
@@ -130,7 +130,6 @@ class Single_test extends Controller
         $question = new Question_model;
         $quest = $question->whereOne('id', $question_id);
 
-
         if (count($_POST) > 0) {
 
             $data = $_POST;
@@ -138,10 +137,22 @@ class Single_test extends Controller
 
                 if ($myImage = upload_images($_FILES)) {
                     $data['image'] = $myImage;
+                    $old_image = $quest->image;
+                    if (isset($old_image) && file_exists($old_image)) {
+                        unlink($old_image);
+                    }
                 }
+                $type = '';
+                if ($quest->question_type == 'objective') {
+                    $type = '?type=objective';
+                } else if ($quest->question_type == 'multiple') {
+                    $type = '?type=multiple';
+                } else {
+                    $type = '?type=subjective';
+                }
+                $question->update($quest->id, $data);
 
-                $question->update($id, $data);
-                $this->redirect('single_test/editquestion/' . $row->id . '?tab=view');
+                $this->redirect('single_test/editquestion/' . $id . '/' . $question_id . $type);
             } else {
                 $errors  = "Unable to add question, please try again later";;
             }
@@ -152,6 +163,52 @@ class Single_test extends Controller
 
         $datas['test'] = $data;
         $datas['quest'] = $quest;
+        $datas['crumbs'] = $crumbs;
+        $datas['results'] = $results;
+        $datas['errors'] = $errors;
+        $datas['page_tab'] = $page_tab;
+        $datas['pager'] = $pager;
+
+        $this->view('single-test', $datas);
+    }
+    public function deletequestion($id = '', $question_id = '')
+    {
+        if (!Auth::authenticated()) {
+            $this->redirect('login');
+        }
+        $errors = array();
+        $tests = new Tests_model;
+        $data = $tests->whereOne('test_id', $id);
+        $row = $tests->whereOne('test_id', $id);
+        $crumbs[] = ['Dashboard', ''];
+        $crumbs[] = ['Tests', 'tests'];
+        if ($data) {
+            $crumbs[] = [$data->test, 'tests'];
+        }
+        $limit = 2;
+        $pager = new Pager($limit);
+        $offset = $pager->offset;
+        $page_tab = 'edit-question';
+        $question = new Question_model;
+        $quest = $question->whereOne('id', $question_id);
+        if (isset($quest->image) && file_exists($quest->image)) {
+            unlink($quest->image);
+        }
+
+
+        if ($question_id) {
+            $question->delete($question_id);
+
+            $this->redirect('single_test/' . $row->id . '?tab=view');
+        } else {
+            $errors  = "Unable to delete question, please try again later";;
+        }
+
+
+        $results = false;
+
+
+        $datas['test'] = $data;
         $datas['crumbs'] = $crumbs;
         $datas['results'] = $results;
         $datas['errors'] = $errors;

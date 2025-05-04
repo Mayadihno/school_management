@@ -1,5 +1,13 @@
+<?php
+$type = ' Subjective';
+if (isset($_GET['type']) && $_GET['type'] == 'objective') {
+    $type = ' Objective';
+} elseif (isset($_GET['type']) && $_GET['type'] == 'multiple') {
+    $type = ' Multiple Choice';
+}
+?>
 <center>
-    <h5>Add Test Questions</h5>
+    <h5>Add <?= $type ?> Test Questions</h5>
 </center>
 
 <form method="post" enctype="multipart/form-data">
