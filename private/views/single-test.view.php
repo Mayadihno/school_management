@@ -2,7 +2,7 @@
 <?php $this->view('includes/nav'); ?>
 
 <div class="container-fluid p-4 shadow mt-5" style="max-width: 1000px; margin: auto;">
-    <?php if ($test): ?>
+    <?php if (isset($test)): ?>
         <?php $this->view('includes/crumbs', ['crumbs' => $crumbs]); ?>
         <h4 class="">Test Profile</h4>
         <div class="row my-3">
@@ -15,19 +15,18 @@
                 </div>
                 <table class="table table-hover table-bordered table-striped">
                     <tr>
-                        <th>Test Name:
+                        <th>Test Name: </th>
                         <td><?= esc($test->test) ?></td>
-                        </th>
+
                     </tr>
                     <tr>
-                        <th>Created by:
+                        <th>Created by: </th>
                         <td><?= esc($test->user->firstname) ?> <?= esc($test->user->lastname) ?></td>
-                        </th>
+
                     </tr>
                     <tr>
-                        <th>Date Created:
+                        <th>Date Created: </th>
                         <td><?= esc(get_date($test->date)) ?></td>
-                        </th>
                     </tr>
                     <tr>
                         <td>

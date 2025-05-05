@@ -30,6 +30,19 @@ class Question_model extends Model
             $this->errors['question'] = "Please add a valid question";
         }
 
+        //check for multiple choice answers
+        $num = 0;
+        $letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        foreach ($data as $key => $value) {
+            // code...
+            if (strstr($key, 'choice')) {
+                if (empty($value)) {
+                    $this->errors['choice' . $num] = "Please add a valid answer in choice " . $letters[$num];
+                }
+                $num++;
+            }
+        }
+
         if (isset($data['correct_answer'])) {
             if (empty($data['correct_answer'])) {
                 $this->errors['correct_answer'] = "Please add an answer";
