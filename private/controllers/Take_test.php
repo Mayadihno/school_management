@@ -25,7 +25,7 @@ class Take_test extends Controller
         $page_tab = 'view';
 
         $testss = $tests->where('id', $id);
-        $questions = $question->where('test_id', $testss[0]->test_id,);
+        $questions = $question->where('test_id', $testss[0]->test_id, 'asc');
         $total_questions = 0;
         if (isset($questions) && !empty($questions)) {
             foreach ($questions as $question) {
