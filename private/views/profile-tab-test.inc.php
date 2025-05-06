@@ -7,3 +7,4 @@
         </div>
     </form>
 </nav>
+<?php include(view_path('tests')) ?>

@@ -1,6 +1,6 @@
 <?php
 
-class Single_test extends Controller
+class Take_test extends Controller
 {
 
     public function index($id = '')
@@ -8,9 +8,7 @@ class Single_test extends Controller
         if (!Auth::authenticated()) {
             $this->redirect('login');
         }
-        if (!Auth::access('lecturer')) {
-            $this->redirect('access_denied');
-        }
+
         $errors = array();
         $tests = new Tests_model;
         $question = new Question_model;
@@ -47,7 +45,7 @@ class Single_test extends Controller
         $datas['total_questions'] = $total_questions;
         $datas['pager'] = $pager;
 
-        $this->view('single-test', $datas);
+        $this->view('take-test', $datas);
     }
 
     public function addquestion($id = '')

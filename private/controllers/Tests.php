@@ -23,10 +23,10 @@ class Tests extends Controller
         } else {
 
             $test = new Tests_model();
-            $my_table = "test_students";
+            $my_table = "class_students";
 
             if (Auth::getRank() == 'lecturer') {
-                $my_table = "test_lecturers";
+                $my_table = "class_lecturers";
             }
 
             $query = "select * from $my_table where user_id = :user_id && disabled = 0";
@@ -42,8 +42,11 @@ class Tests extends Controller
 
             $data = [];
             if (isset($arr['stud_tests']) && !empty($arr['stud_tests'])) {
-                foreach ($arr['stud_Tests'] as $stud_test) {
-                    $data[]  = $test->whereOne('id', $stud_test->test_id);
+                foreach ($arr['stud_tests'] as $stud_test) {
+                    $res = $test->where('class_id', $stud_test->class_id);
+                    if (is_array($res) && count($res) > 0) {
+                        $data = array_merge($data, $res);
+                    }
                 }
             }
         }
