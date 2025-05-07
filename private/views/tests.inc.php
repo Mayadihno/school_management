@@ -16,7 +16,7 @@
      <?php if (isset($tests) && $tests) : ?>
          <?php foreach ($tests as $test) : ?>
              <tr>
-                 <?php if (Auth::getRank() != 'student'): ?>
+                 <?php if (Auth::access('lecturer')): ?>
                      <td>
                          <a href="<?= ROOT ?>single_test/<?= $test->id ?>">
                              <button class="btn btn-primary btn-sm"><i class="fa fa-chevron-right"></i></button>

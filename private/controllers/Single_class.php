@@ -9,6 +9,7 @@ class Single_class extends Controller
         if (!Auth::authenticated()) {
             $this->redirect('login');
         }
+
         $errors = array();
         $class = new Classes_model;
         $data = $class->whereOne('id', $id);

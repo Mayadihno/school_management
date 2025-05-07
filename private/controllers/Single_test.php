@@ -28,6 +28,7 @@ class Single_test extends Controller
 
         $testss = $tests->where('id', $id);
         $questions = $question->where('test_id', $testss[0]->test_id,);
+
         $total_questions = 0;
         if (isset($questions) && !empty($questions)) {
             foreach ($questions as $question) {
@@ -72,6 +73,8 @@ class Single_test extends Controller
         $question = new Question_model;
 
         if (count($_POST) > 0) {
+
+
 
             $data = $_POST;
             $data['test_id'] = $id;
@@ -156,10 +159,13 @@ class Single_test extends Controller
         $quest = $question->whereOne('id', $question_id);
 
         if (count($_POST) > 0) {
+            if (!$row->editable) {
+                $errors[] = 'This test is not editable';
+            }
 
             $data = $_POST;
 
-            if ($question->validate($data)) {
+            if ($question->validate($data) && count($errors) == 0) {
 
                 // Handle image upload
                 if ($myImage = upload_images($_FILES)) {
@@ -212,6 +218,7 @@ class Single_test extends Controller
 
                 $this->redirect('single_test/editquestion/' . $id . '/' . $question_id . $type);
             } else {
+                // $errors = array_merge($errors, "Unable to add question, please try again later");
                 $errors[] = "Unable to add question, please try again later";
             }
         }

@@ -17,6 +17,8 @@ class Take_test extends Controller
         $crumbs[] = ['Tests', 'tests'];
         if ($data) {
             $crumbs[] = [$data->test, 'tests'];
+            $query = 'update tests set editable = 0 where id = :id limit 1';
+            $tests->query($query, ['id' => $data->id]);
         }
 
         $limit = 2;

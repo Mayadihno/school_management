@@ -1,4 +1,5 @@
-<?php if (is_object($quest)) : ?>
+<?php if (is_object($quest)) :  ?>
+
     <center>
         <h5>Edit <?= ucfirst($quest->question_type) ?> Test Questions</h5>
     </center>

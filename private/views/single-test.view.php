@@ -2,9 +2,10 @@
 <?php $this->view('includes/nav'); ?>
 
 <div class="container-fluid p-4 shadow mt-5" style="max-width: 1000px; margin: auto;">
-    <?php if (isset($test)): ?>
+    <?php if (isset($test)):  ?>
         <?php $this->view('includes/crumbs', ['crumbs' => $crumbs]); ?>
         <h4 class="">Test Profile</h4>
+
         <div class="row my-3">
             <div class="col-sm-12 col-md-12 bg-light p-3 rounded shadow">
                 <div class=" d-flex justify-content-evenly align-items-center mb-2">

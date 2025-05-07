@@ -20,6 +20,7 @@ class Tests_model extends Model
     ];
     protected $afterSelect = [
         'get_user',
+        'get_class',
     ];
 
     public function validate($data)
@@ -67,6 +68,16 @@ class Tests_model extends Model
             $result = $user->where('user_id', $value->user_id);
             $data[$key]->user = is_array($result) ? $result[0] : false;
             //we are setting the new data key to user to accomadate the new value
+        }
+        return $data;
+    }
+    public function get_class($data)
+    {
+        $class = new Classes_model();
+        foreach ($data as $key => $value) {
+            $result = $class->where('id', $value->class_id);
+            $data[$key]->class = is_array($result) ? $result[0] : false;
+            //we are setting the new data key to class to accomadate the new value
         }
         return $data;
     }
