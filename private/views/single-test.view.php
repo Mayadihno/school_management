@@ -32,6 +32,19 @@
                     <tr>
                         <td>
                             <strong>Test Status:</strong> <?= $test->disabled == 0 ? 'Active' : 'Inactive' ?>
+                            <?php if ($test->disabled == 0): ?>
+                                <a href="<?= ROOT ?>single_test/<?= $test->id ?>?disabled=true" class="float-end">
+                                    <button class="btn btn-sm btn-danger ms-3">
+                                        Disable Test
+                                    </button>
+                                </a>
+                            <?php else: ?>
+                                <a href="<?= ROOT ?>single_test/<?= $test->id ?>?disabled=false" class="float-end">
+                                    <button class=" btn btn-sm btn-success ms-3">
+                                        Enable Test
+                                    </button>
+                                </a>
+                            <?php endif; ?>
                         </td>
                     </tr>
                     <tr>

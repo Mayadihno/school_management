@@ -9,6 +9,21 @@ class=>function = function inside the class to perform some tasks
 echo '<pre>';
 print_r($users);
 
+ <?php if ($question->question_type != 'multiple') : ?>
+                        <?php if (!empty($saved_ans)): $found = false; ?>
+                            <?php foreach ($saved_ans as $ans): ?>
+                                <?php if ($ans->question_id == $question->id): $found = true; ?>
+                                    <input type="text" value="<?= $ans->question_id == $question->id ? $ans->answer : '' ?>" class="form-control" name="answer[<?= $question->id ?>]" placeholder="Your answer here">
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                            <?php if (!$found): ?>
+                                <input type="text" class="form-control" name="answer[<?= $question->id ?>]" placeholder="Your answer here">
+                            <?php endif; ?>
+                        <?php else: ?>
+                            <input type="text" class="form-control" name="answer[<?= $question->id ?>]" placeholder="Your answer here">
+                        <?php endif; ?>
+                    <?php endif; ?>
+
 
  $alllowed_ext = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
 

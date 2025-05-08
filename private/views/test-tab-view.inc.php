@@ -75,10 +75,12 @@
             </div>
             <div class="card-footer text-body-secondary justify-content-between d-flex align-items-center">
                 <?= get_date2($question->date) ?>
-                <div class="float-end">
-                    <a href="<?= ROOT ?>single_test/editquestion/<?= $test->test_id ?>/<?= $question->id ?><?= $type ?>" class="btn btn-sm btn-primary"><i class="fas fa-edit pe-2"></i>Edit</a>
-                    <a href="<?= ROOT ?>single_test/deletequestion/<?= $test->test_id ?>/<?= $question->id ?><?= $type ?>" class="btn btn-sm btn-danger"><i class="fas fa-trash pe-2"></i>Delete</a>
-                </div>
+                <?php if ($test->editable): ?>
+                    <div class="float-end">
+                        <a href="<?= ROOT ?>single_test/editquestion/<?= $test->test_id ?>/<?= $question->id ?><?= $type ?>" class="btn btn-sm btn-primary"><i class="fas fa-edit pe-2"></i>Edit</a>
+                        <a href="<?= ROOT ?>single_test/deletequestion/<?= $test->test_id ?>/<?= $question->id ?><?= $type ?>" class="btn btn-sm btn-danger"><i class="fas fa-trash pe-2"></i>Delete</a>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
 

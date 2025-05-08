@@ -21,6 +21,19 @@ class Single_test extends Controller
             $crumbs[] = [$data->test, 'tests'];
         }
 
+
+        //disable test
+        if (isset($_GET['disabled']) && $_GET['disabled'] == 'true') {
+            $query = 'update tests set disabled = 1 where id = :id limit 1';
+            $tests->query($query, ['id' => $data->id]);
+            $this->redirect('single_test/' . $id . '?tab=view');
+        } else if (isset($_GET['disabled']) && $_GET['disabled'] == 'false') {
+            $query = 'update tests set disabled = 0 where id = :id limit 1';
+            $tests->query($query, ['id' => $data->id]);
+            $this->redirect('single_test/' . $id . '?tab=view');
+        }
+
+
         $limit = 2;
         $pager = new Pager($limit);
         $offset = $pager->offset;
@@ -260,13 +273,17 @@ class Single_test extends Controller
             unlink($quest->image);
         }
 
+        if (!$row->editable) {
+            $errors[] = 'This test is not editable';
+        }
 
-        if ($question_id) {
+
+        if ($question_id && count($errors) == 0) {
             $question->delete($question_id);
 
             $this->redirect('single_test/' . $row->id . '?tab=view');
         } else {
-            $errors  = "Unable to delete question, please try again later";;
+            $errors = array_merge($errors, "Unable to add question, please try again later");
         }
 
 

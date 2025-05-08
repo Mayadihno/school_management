@@ -41,9 +41,11 @@ class Profile extends Controller
         } else  if ($data['page_tab'] == 'tests' &&  $datas) {
             $class = new Classes_model();
             $my_table = "class_students";
+            $disabled = '&& disabled = 0';
 
             if ($datas->rank == 'lecturer') {
                 $my_table = "class_lecturers";
+                $disabled = '';
             }
 
             $query = "select * from $my_table where user_id = :user_id && disabled = 0";
@@ -62,7 +64,7 @@ class Profile extends Controller
                 $class_ids[] = $stud_class->id;
             }
             $id_string = "'" . implode("','", $class_ids) . "'";
-            $query = "select * from tests where class_id in ($id_string) && disabled = 0 order by date desc";
+            $query = "select * from tests where class_id in ($id_string) $disabled order by date desc";
             $test_model = new Tests_model();
             $tests = $test_model->query($query, []);
             $data['tests'] = $tests;

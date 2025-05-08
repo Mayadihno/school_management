@@ -16,6 +16,21 @@ class Model extends Database
         }
     }
 
+    protected function get_primary_key($table)
+    {
+        $query = "SHOW KEYS FROM $table WHERE Key_name = 'PRIMARY'";
+        $db = new Database();
+        $result = $db->query($query);
+
+        if (!empty($result)) {
+            $result = $result[0];
+            if (isset($result->Column_name)) {
+                return $result->Column_name;
+            }
+        }
+        return 'id';
+    }
+
     public function where($column, $value, $orderBy = 'DESC', $col = 'date')
     {
         $column = addslashes($column);

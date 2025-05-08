@@ -24,12 +24,14 @@ class Tests extends Controller
 
             $test = new Tests_model();
             $my_table = "class_students";
+            $disabled = '&& disabled = 0';
 
             if (Auth::getRank() == 'lecturer') {
                 $my_table = "class_lecturers";
+                $disabled = '';
             }
 
-            $query = "select * from $my_table where user_id = :user_id && disabled = 0";
+            $query = "select * from $my_table where user_id = :user_id $disabled";
 
             $arr['user_id'] = Auth::getUser_id();
             if (isset($_GET['find'])) {
@@ -43,7 +45,8 @@ class Tests extends Controller
             $data = [];
             if (isset($arr['stud_tests']) && !empty($arr['stud_tests'])) {
                 foreach ($arr['stud_tests'] as $stud_test) {
-                    $res = $test->where('class_id', $stud_test->class_id);
+                    $query = "select * from tests where class_id = :class_id $disabled order by date desc";
+                    $res = $test->query($query, ['class_id' => $stud_test->class_id]);
                     if (is_array($res) && count($res) > 0) {
                         $data = array_merge($data, $res);
                     }
