@@ -31,10 +31,11 @@ class Model extends Database
         return 'id';
     }
 
-    public function where($column, $value, $orderBy = 'DESC', $col = 'date')
+    public function where($column, $value, $orderBy = 'DESC', $col = 'date', $limit = 10, $offset = 0)
     {
         $column = addslashes($column);
-        $query = "SELECT * FROM $this->table WHERE $column = :value ORDER BY $col $orderBy";
+        $query = "SELECT * FROM $this->table WHERE $column = :value ORDER BY $col $orderBy LIMIT $limit OFFSET $offset";
+
 
         $data = $this->query($query, [
             'value' => $value
@@ -75,9 +76,9 @@ class Model extends Database
     }
 
 
-    public function findAll($column = 'date', $orderBy = 'DESC')
+    public function findAll($column = 'date', $orderBy = 'DESC', $limit = 10, $offset = 0)
     {
-        $query = "SELECT * FROM $this->table ORDER BY $column $orderBy";
+        $query = "SELECT * FROM $this->table ORDER BY $column $orderBy LIMIT $limit OFFSET $offset";
         $data = $this->query($query);
 
         //run this after selecting from db

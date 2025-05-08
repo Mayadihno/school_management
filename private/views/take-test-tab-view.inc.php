@@ -74,10 +74,11 @@
 
         <?php endforeach; ?>
         <center>
+            <small>Click save answer before moving to another page to save your answer</small> <br>
             <button class="btn btn-primary">Submit</button>
         </center>
     </form>
-
+    <?php $pager->display() ?>
 <?php else : ?>
     <div class="alert alert-danger" role="alert">
         No questions found for this test.
