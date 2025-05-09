@@ -137,3 +137,61 @@ function can_take_test($test_id)
 
     return "No";
 }
+
+function get_answer($saved_ans, $question_id)
+{
+    foreach ($saved_ans as $ans) {
+        if ($ans->question_id == $question_id) {
+            return $ans->answer;
+        }
+    }
+    return '';
+}
+
+function get_answer_percentage1($questions, $saved_ans)
+{
+    $total_answers_count = 0;
+    if (!empty($questions)) {
+        foreach ($saved_ans as $quest) {
+            $answers = get_answer($saved_ans, $quest->question_id);
+            if (trim($answers) != '') {
+                $total_answers_count++;
+            }
+        }
+    }
+    if ($total_answers_count > 0) {
+        return round(($total_answers_count / count($questions)) * 100, 1);
+    }
+    return 0;
+}
+
+function get_answer_percentage($test_id, $user_id)
+{
+
+    $answers = new Answers_model();
+    $query = 'select question_id,answer from answers where test_id = :id and user_id = :user_id';
+    $saved_ans = $answers->query($query, ['id' => $test_id, 'user_id' => $user_id]);
+    if (empty($saved_ans)) {
+        return 0;
+    }
+
+    $tests = new Tests_model;
+    $testss = $tests->where('id', $test_id);
+    $quests = new Question_model();
+    $questions = $quests->query('select * from test_questions where test_id = :test_id order by date asc', ['test_id' => $testss[0]->test_id]);
+
+    $total_answers_count = 0;
+    if (!empty($questions)) {
+        foreach ($saved_ans as $quest) {
+            $answers = get_answer($saved_ans, $quest->question_id);
+            if (trim($answers) != '') {
+                $total_answers_count++;
+            }
+        }
+    }
+    if ($total_answers_count > 0) {
+        return round(($total_answers_count / count($questions)) * 100, 1);
+        show($total_answers_count);
+    }
+    return 0;
+}

@@ -61,7 +61,12 @@ class Take_test extends Controller
                     }
                 }
             }
-            $this->redirect('take_test/' . $id);
+
+            $page_number = '&page=1';
+            if (isset($_GET['page']) && is_numeric($_GET['page'])) {
+                $page_number = '&page=' . $_GET['page'];
+            }
+            $this->redirect('take_test/' . $id . $page_number);
         }
 
         $limit = 2;
@@ -71,13 +76,9 @@ class Take_test extends Controller
 
         $testss = $tests->where('id', $id);
         $questions = $question->where('test_id', $testss[0]->test_id, 'asc', 'date', $limit, $offset);
+        $all_questions = $question->query('select * from test_questions where test_id = :test_id order by date asc', ['test_id' => $testss[0]->test_id]);
 
-        $total_questions = 0;
-        if (isset($questions) && !empty($questions)) {
-            foreach ($questions as $question) {
-                $total_questions++;
-            }
-        }
+        $total_questions = is_array($all_questions) ? count($all_questions) : 0;
 
         $results = false;
 
@@ -91,35 +92,10 @@ class Take_test extends Controller
         $datas['total_questions'] = $total_questions;
         $datas['pager'] = $pager;
         $datas['saved_ans'] = $saved_ans;
+        $datas['all_questions'] = $all_questions;
+
 
 
         $this->view('take-test', $datas);
-    }
-
-    protected function get_answer($saved_ans, $question_id)
-    {
-        foreach ($saved_ans as $ans) {
-            if ($ans->question_id == $question_id) {
-                return $ans->answer;
-            }
-        }
-        return '';
-    }
-
-    protected function get_answer_percentage($questions, $saved_ans)
-    {
-        $total_answers_count = 0;
-        if (!empty($questions)) {
-            foreach ($saved_ans as $quest) {
-                $answers = $this->get_answer($saved_ans, $quest->question_id);
-                if (trim($answers) != '') {
-                    $total_answers_count++;
-                }
-            }
-        }
-        if ($total_answers_count > 0) {
-            return round(($total_answers_count / count($questions)) * 100, 1);
-        }
-        return 0;
     }
 }

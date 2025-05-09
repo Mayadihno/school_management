@@ -1,4 +1,4 @@
-<?php $percent = $this->get_answer_percentage($questions, $saved_ans); ?>
+<?php $percent = get_answer_percentage($test->id, Auth::getUser_id()); ?>
 
 <div class=" container-fluid text-center mb-2">
     <div class="" style="color: <?= $percent > 50 ? 'green' : 'red' ?>"> <?= $percent ?>% Answered</div>
@@ -20,7 +20,7 @@
 
 
         <?php foreach ($questions as $question) : $num++; ?>
-            <?php $my_answer = $this->get_answer($saved_ans, $question->id); ?>
+            <?php $my_answer = get_answer($saved_ans, $question->id); ?>
 
             <div class="card mb-4">
                 <div class="card-header">
