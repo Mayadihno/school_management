@@ -28,9 +28,25 @@ class Take_test extends Controller
                 $tests->query($query, ['id' => $data->id]);
             }
         }
+        $db =  new Database();
 
         //something was posted
         if (count($_POST) > 0) {
+
+            //saved answers
+
+            $arr_ans['test_id'] = $id;
+            $arr_ans['user_id'] = Auth::getUser_id();
+
+
+            $query = 'select id from answered_tests where test_id = :test_id and user_id = :user_id limit 1';
+            $check = $db->query($query, $arr_ans);
+
+            if (!$check) {
+                $arr_ans['date'] = date("Y-m-d H:i:s");
+                $query = 'insert into answered_tests (test_id,user_id,date) values (:test_id,:user_id,:date)';
+                $db->query($query, $arr_ans);
+            }
 
             $data = $_POST;
 
@@ -77,10 +93,31 @@ class Take_test extends Controller
         $testss = $tests->where('id', $id);
         $questions = $question->where('test_id', $testss[0]->test_id, 'asc', 'date', $limit, $offset);
         $all_questions = $question->query('select * from test_questions where test_id = :test_id order by date asc', ['test_id' => $testss[0]->test_id]);
-
         $total_questions = is_array($all_questions) ? count($all_questions) : 0;
-
         $results = false;
+
+        //get answered test row
+        $arr_ans = [];
+        $arr_ans['test_id'] = $id;
+        $arr_ans['user_id'] = Auth::getUser_id();
+
+        $query = 'select * from answered_tests where test_id = :test_id and user_id = :user_id limit 1';
+        $answered_test_row = $db->query($query, $arr_ans);
+
+        // if (is_array($answered_test_row)) {
+        //     $data['answered_test_row'] = $answered_test_row[0];
+        // }
+
+        //if a test is submitted
+        if (isset($_GET['submit']) && $_GET['submit'] == 'true') {
+            $arr_ans['submitted_date'] = date("Y-m-d H:i:s");
+            $arr_ans['submitted'] = 1;
+            $query = 'update answered_tests set submitted = :submitted, submitted_date = :submitted_date where test_id = :test_id and user_id = :user_id limit 1';
+            $db->query($query, $arr_ans);
+            $this->redirect('take_test/' . $id);
+        }
+
+
 
 
         $datas['test'] = $data;
@@ -93,6 +130,7 @@ class Take_test extends Controller
         $datas['pager'] = $pager;
         $datas['saved_ans'] = $saved_ans;
         $datas['all_questions'] = $all_questions;
+        $datas['answered_test_row'] = $answered_test_row[0] ?? false;
 
 
 

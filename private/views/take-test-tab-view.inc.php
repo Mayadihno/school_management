@@ -1,8 +1,44 @@
 <?php $percent = get_answer_percentage($test->id, Auth::getUser_id()); ?>
-
 <div class=" container-fluid text-center mb-2">
     <div class="" style="color: <?= $percent > 50 ? 'green' : 'red' ?>"> <?= $percent ?>% Answered</div>
     <div class="bg-primary" style="height: 5px; width: <?= $percent ?>%"></div>
+    <?php if ($answered_test_row): ?>
+        <?php if ($answered_test_row->submitted): ?>
+            <div class="text-success pt-1">
+                Test submitted successfully on <?= get_date2($answered_test_row->submitted_date) ?>
+            </div>
+        <?php else: ?>
+            <div class="d-flex justify-content-between align-items-center mt-1">
+                <span class="fw-bold text-danger">Test not submitted yet</span>
+                <a href="<?= ROOT ?>take_test/<?= $test->id ?>?submit=true"
+                    data-bs-toggle="modal"
+                    data-bs-target="#submitTestModal"
+                    onclick="event.preventDefault(); document.getElementById('submitTestModalConfirm').setAttribute('href', this.href);">
+                    <button class="btn btn-primary"> Submit test</button>
+                </a>
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
+
+    <div class="modal fade" id="submitTestModal" tabindex="-1" aria-labelledby="submitTestModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="submitTestModalLabel">Confirm Submission</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to submit the test? You won't be able to change your answers after submission.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <!-- This is the real submission link triggered after confirmation -->
+                    <a id="submitTestModalConfirm" href="#" class="btn btn-primary">Yes, Submit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 <nav class="navbar navbar-expand-lg d-flex justify-content-between navbar-light bg-light">
     <center class="">
@@ -16,7 +52,7 @@
 <?php if (isset($questions) && is_array($questions)) : ?>
     <form action="" method="post">
 
-        <?php $num = 0; ?>
+        <?php $num = $pager->offset; ?>
 
 
         <?php foreach ($questions as $question) : $num++; ?>
@@ -36,8 +72,7 @@
                     <?php if ($question->question_type != 'multiple') : ?>
 
 
-
-                        <input type="text" value="<?= $my_answer ?>" class="form-control" name="answer[<?= $question->id ?>]" placeholder="Your answer here">
+                        <input <?= $answered_test_row->submitted ? 'disabled' : '' ?> type="text" value="<?= $my_answer ?>" class="form-control" name="answer[<?= $question->id ?>]" placeholder="Your answer here">
 
                     <?php endif; ?>
 
@@ -73,10 +108,12 @@
 
 
         <?php endforeach; ?>
-        <center>
-            <small>Click save answer before moving to another page to save your answer</small> <br>
-            <button class="btn btn-primary">Submit</button>
-        </center>
+        <?php if (!$answered_test_row->submitted): ?>
+            <center>
+                <small>Click save answer before moving to another page to save your answer</small> <br>
+                <button class="btn btn-primary">Submit</button>
+            </center>
+        <?php endif; ?>
     </form>
     <?php $pager->display() ?>
 <?php else : ?>
