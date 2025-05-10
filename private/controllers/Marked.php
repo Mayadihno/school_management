@@ -10,7 +10,7 @@ class Marked extends Controller
             $this->redirect('access_denied');
         }
 
-        $tests = new Tests_model();
+        $test = new Tests_model();
         $school_id =  Auth::getSchool_id();
         if (Auth::access(('admin'))) {
             $query = "select * from tests where school_id = :school_id order by date desc";
@@ -20,9 +20,8 @@ class Marked extends Controller
                 $query = "select * from tests where school_id = :school_id && (test like :find) order by date desc";
                 $arr['find'] = $find;
             }
-            $data =  $tests->query($query, $arr);
+            $data =  $test->query($query, $arr);
         } else {
-            $test = new Tests_model();
             $my_table = "class_lecturers";
             $query = "select * from $my_table where user_id = :user_id && disabled = 0";
 
@@ -53,12 +52,11 @@ class Marked extends Controller
         $marked = [];
         if (count($data) > 0) {
             foreach ($data as $stud_test) {
-                // show($stud_test->id);
                 $query = "select * from answered_tests where test_id = :test_id && submitted = 1 && marked = 1 order by date desc";
-                // show($query);
                 $res = $test->query($query, ['test_id' => $stud_test->id]);
-                // show($res);
                 if (is_array($res) && count($res) > 0) {
+                    $test_details = $test->whereOne('id', $res[0]->test_id);
+                    $res[0]->test_details = $test_details;
                     $marked = array_merge($marked, $res);
                 }
             }

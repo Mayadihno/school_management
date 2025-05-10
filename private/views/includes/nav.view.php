@@ -51,8 +51,19 @@
                 </li>
 
                 <?php if (Auth::access('lecturer')): ?>
-                    <li class="nav-item">
+                    <li class="nav-item position-relative">
                         <a class="nav-link text-uppercase" href="<?= ROOT ?>to_mark">to mark</a>
+                        <?php
+                        $test = new Tests_model();
+                        $to_mark_count = $test->get_to_mark_count();
+                        ?>
+                        <?php if ($to_mark_count > 0): ?>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <?= $to_mark_count ?>
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        <?php endif; ?>
+
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-uppercase" href="<?= ROOT ?>marked">marked</a>

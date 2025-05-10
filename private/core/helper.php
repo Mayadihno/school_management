@@ -171,6 +171,7 @@ function get_answer_percentage1($questions, $saved_ans)
 function get_answer_percentage($test_id, $user_id)
 {
 
+
     $answers = new Answers_model();
     $query = 'select question_id,answer from answers where test_id = :id and user_id = :user_id';
     $saved_ans = $answers->query($query, ['id' => $test_id, 'user_id' => $user_id]);
