@@ -1,9 +1,10 @@
 <?php
 
-class Take_test extends Controller
+class Mark_test extends Controller
 {
 
-    public function index($id = '')
+    public function index($id = '', $users_id = '')
+    //if two parameters are passed in the url that is how to access it in the controller
     {
         if (!Auth::authenticated()) {
             $this->redirect('login');
@@ -16,7 +17,7 @@ class Take_test extends Controller
         $answers = new Answers_model;
 
         $query = 'select question_id,answer from answers where test_id = :id and user_id = :user_id';
-        $saved_ans = $answers->query($query, ['id' => $id, 'user_id' => Auth::getUser_id()]);
+        $saved_ans = $answers->query($query, ['id' => $id, 'user_id' => $users_id]);
 
 
         $crumbs[] = ['Dashboard', ''];
@@ -38,7 +39,7 @@ class Take_test extends Controller
 
 
             $arr_ans['test_id'] = $id;
-            $arr_ans['user_id'] = Auth::getUser_id();
+            $arr_ans['user_id'] = $users_id;
 
 
             $query = 'select id from answered_tests where test_id = :test_id and user_id = :user_id limit 1';
@@ -59,7 +60,7 @@ class Take_test extends Controller
                     $insertData = [
                         'test_id' => $id,
                         'date' => date("Y-m-d H:i:s"),
-                        'user_id' => Auth::getUser_id(),
+                        'user_id' => $users_id,
                         'question_id' => $question_id,
                         'answer' => $user_answer
                     ];
@@ -105,7 +106,7 @@ class Take_test extends Controller
             $arr_anss['submitted_date'] = date("Y-m-d H:i:s");
             $arr_anss['submitted'] = 1;
             $arr_anss['test_id'] = $id;
-            $arr_anss['user_id'] = Auth::getUser_id();
+            $arr_anss['user_id'] = $users_id;
             $query = 'update answered_tests set submitted = :submitted, submitted_date = :submitted_date where test_id = :test_id and user_id = :user_id limit 1';
             $db->query($query, $arr_anss);
             $this->redirect('take_test/' . $id);
@@ -113,7 +114,7 @@ class Take_test extends Controller
 
 
         //get answered test row
-        $datas['answered_test_row'] = $tests->get_answered_test($id, Auth::getUser_id());
+        $datas['answered_test_row'] = $tests->get_answered_test($id, $users_id);
 
         $datas['submitted'] = false;
         if (isset($datas['answered_test_row']->submitted) && $datas['answered_test_row']->submitted == 1) {
@@ -139,6 +140,6 @@ class Take_test extends Controller
 
 
 
-        $this->view('take-test', $datas);
+        $this->view('mark-test', $datas);
     }
 }

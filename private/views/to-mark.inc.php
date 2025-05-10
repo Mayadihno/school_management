@@ -19,7 +19,7 @@
                  <tr>
                      <?php if (Auth::access('lecturer')): ?>
                          <td>
-                             <a href="<?= ROOT ?>single_test/<?= $test->id ?>">
+                             <a href="<?= ROOT ?>mark_test/<?= $test->test_id ?>/<?= $test->user->user_id ?>">
                                  <button class="btn btn-primary btn-sm">Mark this test <i class="fa fa-chevron-right"></i></button>
                              </a>
                          </td>

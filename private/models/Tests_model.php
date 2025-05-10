@@ -93,6 +93,7 @@ class Tests_model extends Model
 
         $res = $db->query($query, $arr);
 
+
         if (is_array($res)) {
             return $res[0];
         }

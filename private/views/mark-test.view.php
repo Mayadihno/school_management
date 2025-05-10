@@ -58,7 +58,7 @@
             <?php
             switch ($page_tab) {
                 case 'view':
-                    include(view_path('take-test-tab-view'));
+                    include(view_path('mark-test-tab-view'));
                     break;
                 default:
                     # code...
