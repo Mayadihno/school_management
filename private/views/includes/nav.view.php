@@ -42,12 +42,22 @@
                         <a class="nav-link text-uppercase" href="<?= ROOT ?>students">students</a>
                     </li>
                 <?php endif; ?>
+
                 <li class="nav-item">
                     <a class="nav-link text-uppercase" href="<?= ROOT ?>classes">classes</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-uppercase" href="<?= ROOT ?>tests">test</a>
                 </li>
+
+                <?php if (Auth::access('lecturer')): ?>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase" href="<?= ROOT ?>to_mark">to mark</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase" href="<?= ROOT ?>marked">marked</a>
+                    </li>
+                <?php endif; ?>
 
             </ul>
             <ul class="ms-auto navbar-nav">

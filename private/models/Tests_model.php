@@ -75,8 +75,10 @@ class Tests_model extends Model
     {
         $class = new Classes_model();
         foreach ($data as $key => $value) {
-            $result = $class->where('id', $value->class_id);
-            $data[$key]->class = is_array($result) ? $result[0] : false;
+            if (isset($value->class_id)) {
+                $result = $class->where('id', $value->class_id);
+                $data[$key]->class = is_array($result) ? $result[0] : false;
+            }
             //we are setting the new data key to class to accomadate the new value
         }
         return $data;
@@ -87,7 +89,9 @@ class Tests_model extends Model
         $db = new Database();
         $arr = ['test_id' => $test_id, 'user_id' => $user_id];
 
-        $res = $db->query("select * from answered_tests where test_id = :test_id && user_id = :user_id limit 1", $arr);
+        $query = "select * from answered_tests where test_id = :test_id && user_id = :user_id limit 1";
+
+        $res = $db->query($query, $arr);
 
         if (is_array($res)) {
             return $res[0];

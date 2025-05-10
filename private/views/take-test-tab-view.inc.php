@@ -1,24 +1,26 @@
 <?php $percent = get_answer_percentage($test->id, Auth::getUser_id()); ?>
+
 <div class=" container-fluid text-center mb-2">
     <div class="" style="color: <?= $percent > 50 ? 'green' : 'red' ?>"> <?= $percent ?>% Answered</div>
     <div class="bg-primary" style="height: 5px; width: <?= $percent ?>%"></div>
-    <?php if ($answered_test_row): ?>
-        <?php if ($answered_test_row->submitted): ?>
-            <div class="text-success pt-1">
-                Test submitted successfully on <?= get_date2($answered_test_row->submitted_date) ?>
-            </div>
-        <?php else: ?>
-            <div class="d-flex justify-content-between align-items-center mt-1">
-                <span class="fw-bold text-danger">Test not submitted yet</span>
-                <a href="<?= ROOT ?>take_test/<?= $test->id ?>?submit=true"
-                    data-bs-toggle="modal"
-                    data-bs-target="#submitTestModal"
-                    onclick="event.preventDefault(); document.getElementById('submitTestModalConfirm').setAttribute('href', this.href);">
-                    <button class="btn btn-primary"> Submit test</button>
-                </a>
-            </div>
-        <?php endif; ?>
+
+    <?php if ($submitted): ?>
+        <div class="text-success pt-1">
+            Test submitted successfully on <?= get_date2($answered_test_row->submitted_date) ?>
+        </div>
+    <?php else: ?>
+        <div class="d-flex justify-content-between align-items-center mt-1">
+            <span class="fw-bold text-danger">Test not submitted yet</span>
+            <a href="<?= ROOT ?>take_test/<?= $test->id ?>?submit=true"
+                data-bs-toggle="modal"
+                data-bs-target="#submitTestModal"
+                onclick="event.preventDefault(); document.getElementById('submitTestModalConfirm').setAttribute('href', this.href);">
+                <button class="btn btn-primary"> Submit test</button>
+            </a>
+        </div>
     <?php endif; ?>
+
+
 
     <div class="modal fade" id="submitTestModal" tabindex="-1" aria-labelledby="submitTestModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -50,7 +52,7 @@
 <hr>
 
 <?php if (isset($questions) && is_array($questions)) : ?>
-    <form action="" method="post">
+    <form method="post">
 
         <?php $num = $pager->offset; ?>
 
@@ -70,10 +72,11 @@
                     <?php endif; ?>
                     <?php $type  = '' ?>
                     <?php if ($question->question_type != 'multiple') : ?>
-
-
-                        <input <?= $answered_test_row->submitted ? 'disabled' : '' ?> type="text" value="<?= $my_answer ?>" class="form-control" name="answer[<?= $question->id ?>]" placeholder="Your answer here">
-
+                        <?php if ($submitted):   ?>
+                            <input <?= $answered_test_row->submitted ? 'disabled' : '' ?> type="text" value="<?= $my_answer ?>" class="form-control" name="answer[<?= $question->id ?>]" placeholder="Your answer here">
+                        <?php else: ?>
+                            <input type="text" value="<?= $my_answer ?>" class="form-control" name="answer[<?= $question->id ?>]" placeholder="Your answer here">
+                        <?php endif; ?>
                     <?php endif; ?>
 
 
@@ -92,8 +95,19 @@
                                 <?php foreach ($choices as $letter => $answer): ?>
                                     <li class="list-group-item">
                                         <label style="cursor: pointer;" class="d-flex align-items-center">
-                                            <input <?= $my_answer == $letter ? ' checked ' : '' ?> style="transform: scale(1.4);" type="radio" value="<?= $letter ?>" name="answer[<?= $question->id ?>]" required>
-                                            <span class="ms-2"><?= $letter ?>: <?= $answer ?></span>
+                                            <?php if (!$submitted): ?>
+                                                <input <?= $my_answer == $letter ? ' checked ' : '' ?> style="transform: scale(1.4);" type="radio" value="<?= $letter ?>" name="answer[<?= $question->id ?>]">
+                                                <span class="ms-2"><?= $letter ?>: <?= $answer ?></span>
+                                            <?php else: ?>
+                                                <?php if ($my_answer == $letter): ?>
+                                                    <div class="d-flex justify-content-between align-items-center w-100">
+                                                        <span class="text-success"><?= $letter ?>: <?= $answer ?></span>
+                                                        <i class="fa fa-check"></i>
+                                                    </div>
+                                                <?php else: ?>
+                                                    <span class="text-danger"><?= $letter ?>: <?= $answer ?></span>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
                                         </label>
                                     </li>
                                 <?php endforeach; ?>
@@ -108,10 +122,10 @@
 
 
         <?php endforeach; ?>
-        <?php if (!$answered_test_row->submitted): ?>
+        <?php if (!$submitted): ?>
             <center>
                 <small>Click save answer before moving to another page to save your answer</small> <br>
-                <button class="btn btn-primary">Submit</button>
+                <button class="btn btn-primary">Save Answer</button>
             </center>
         <?php endif; ?>
     </form>

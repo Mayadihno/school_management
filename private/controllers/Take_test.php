@@ -33,7 +33,9 @@ class Take_test extends Controller
         //something was posted
         if (count($_POST) > 0) {
 
+
             //saved answers
+
 
             $arr_ans['test_id'] = $id;
             $arr_ans['user_id'] = Auth::getUser_id();
@@ -49,6 +51,7 @@ class Take_test extends Controller
             }
 
             $data = $_POST;
+
 
             // Accessing the nested answers array
             if (isset($data['answer']) && is_array($data['answer'])) {
@@ -96,28 +99,25 @@ class Take_test extends Controller
         $total_questions = is_array($all_questions) ? count($all_questions) : 0;
         $results = false;
 
-        //get answered test row
-        $arr_ans = [];
-        $arr_ans['test_id'] = $id;
-        $arr_ans['user_id'] = Auth::getUser_id();
-
-        $query = 'select * from answered_tests where test_id = :test_id and user_id = :user_id limit 1';
-        $answered_test_row = $db->query($query, $arr_ans);
-
-        // if (is_array($answered_test_row)) {
-        //     $data['answered_test_row'] = $answered_test_row[0];
-        // }
 
         //if a test is submitted
         if (isset($_GET['submit']) && $_GET['submit'] == 'true') {
-            $arr_ans['submitted_date'] = date("Y-m-d H:i:s");
-            $arr_ans['submitted'] = 1;
+            $arr_anss['submitted_date'] = date("Y-m-d H:i:s");
+            $arr_anss['submitted'] = 1;
+            $arr_anss['test_id'] = $id;
+            $arr_anss['user_id'] = Auth::getUser_id();
             $query = 'update answered_tests set submitted = :submitted, submitted_date = :submitted_date where test_id = :test_id and user_id = :user_id limit 1';
-            $db->query($query, $arr_ans);
+            $db->query($query, $arr_anss);
             $this->redirect('take_test/' . $id);
         }
 
 
+        //get answered test row
+        $datas['answered_test_row'] = $tests->get_answered_test($id, Auth::getUser_id());
+        $datas['submitted'] = false;
+        if (isset($datas['answered_test_row']->submitted) && $datas['answered_test_row']->submitted == 1) {
+            $datas['submitted'] = true;
+        }
 
 
         $datas['test'] = $data;
@@ -130,7 +130,8 @@ class Take_test extends Controller
         $datas['pager'] = $pager;
         $datas['saved_ans'] = $saved_ans;
         $datas['all_questions'] = $all_questions;
-        $datas['answered_test_row'] = $answered_test_row[0] ?? false;
+
+
 
 
 
