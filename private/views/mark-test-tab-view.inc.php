@@ -1,28 +1,42 @@
-<?php $percent = get_answer_percentage($test->id, Auth::getUser_id()); ?>
+<?php
+// $percent = get_answer_percentage($test->id, $user_id);
+$mark_percent = get_mark_percentage($test->id, $user_id);
+
+
+?>
 
 <div class=" container-fluid text-center mb-2">
-    <div class="" style="color: <?= $percent > 50 ? 'green' : 'red' ?>"> <?= $percent ?>% Answered</div>
-    <div class="bg-primary" style="height: 5px; width: <?= $percent ?>%"></div>
+    <div class="" style="color: <?= $mark_percent > 50 ? 'green' : 'red' ?>"> <?= $mark_percent ?>% Marked</div>
+    <div class="bg-primary" style="height: 5px; width: <?= $mark_percent ?>%"></div>
 
-    <?php if ($submitted): ?>
-        <div class="text-success pt-1">
+    <?php if ($submitted && !$marked): ?>
+        <div class="text-success pt-1 d-flex justify-content-between align-items-center">
             Test submitted successfully on <?= get_date2($answered_test_row->submitted_date) ?>
-        </div>
-    <?php else: ?>
-        <div class="d-flex justify-content-between align-items-center mt-1">
-            <span class="fw-bold text-danger">Test not submitted yet</span>
-            <a href="<?= ROOT ?>take_test/<?= $test->id ?>?submit=true"
-                data-bs-toggle="modal"
-                data-bs-target="#submitTestModal"
-                onclick="event.preventDefault(); document.getElementById('submitTestModalConfirm').setAttribute('href', this.href);">
-                <button class="btn btn-primary"> Submit test</button>
-            </a>
+
+            <div class="">
+                <a href="<?= ROOT ?>mark_test/<?= $test->id ?>/<?= $user_id ?>?unsubmit=true"
+                    data-bs-toggle="modal"
+                    data-bs-target="#unsubmitTestModal"
+                    onclick="event.preventDefault(); document.getElementById('unsubmitTestModalConfirm').setAttribute('href', this.href);">
+                    <button class="btn btn-primary btn-sm">Unsubmit test</button>
+                </a>
+                <a href="<?= ROOT ?>mark_test/<?= $test->id ?>/<?= $user_id ?>?auto_mark=true"
+                    data-bs-toggle="modal"
+                    data-bs-target="#automarkTestModal"
+                    onclick="event.preventDefault(); document.getElementById('automarkTestModalConfirm').setAttribute('href', this.href);">
+                    <button class="btn btn-secondary btn-sm">Auto Mark test</button>
+                </a>
+                <a href="<?= ROOT ?>mark_test/<?= $test->id ?>/<?= $user_id ?>?set_as_mark=true"
+                    <button class="btn btn-success btn-sm">Set Test as marked</button>
+                </a>
+            </div>
+
         </div>
     <?php endif; ?>
 
 
 
-    <div class="modal fade" id="submitTestModal" tabindex="-1" aria-labelledby="submitTestModalLabel" aria-hidden="true">
+    <div class="modal fade" id="automarkTestModal" tabindex="-1" aria-labelledby="submitTestModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -30,12 +44,31 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to submit the test? You won't be able to change your answers after submission.
+                    Are you sure you want to auto mark this test?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <!-- This is the real submission link triggered after confirmation -->
-                    <a id="submitTestModalConfirm" href="#" class="btn btn-primary">Yes, Submit</a>
+                    <a id="automarkTestModalConfirm" href="#" class="btn btn-primary">Yes, Auto Mark</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="unsubmitTestModal" tabindex="-1" aria-labelledby="submitTestModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="submitTestModalLabel">Confirm Submission</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to unsubmit this test?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <!-- This is the real submission link triggered after confirmation -->
+                    <a id="unsubmitTestModalConfirm" href="#" class="btn btn-primary">Yes, Unsubmit</a>
                 </div>
             </div>
         </div>
@@ -58,7 +91,10 @@
 
 
         <?php foreach ($questions as $question) : $num++; ?>
-            <?php $my_answer = get_answer($saved_ans, $question->id); ?>
+            <?php
+            $my_answer = get_answer($saved_ans, $question->id);
+            $my_mark = get_answer_mark($saved_ans, $question->id);
+            ?>
 
             <div class="card mb-4">
                 <div class="card-header">
@@ -72,11 +108,21 @@
                     <?php endif; ?>
                     <?php $type  = '' ?>
                     <?php if ($question->question_type != 'multiple') : ?>
-                        <?php if ($submitted):   ?>
-                            <input <?= $answered_test_row->submitted ? 'disabled' : '' ?> type="text" value="<?= $my_answer ?>" class="form-control" name="answer[<?= $question->id ?>]" placeholder="Your answer here">
-                        <?php else: ?>
-                            <input type="text" value="<?= $my_answer ?>" class="form-control" name="answer[<?= $question->id ?>]" placeholder="Your answer here">
-                        <?php endif; ?>
+                        <input type="text" value="<?= $my_answer ?>" class="form-control" name="answer[<?= $question->id ?>]" placeholder="Your answer here">
+                        <hr>
+                        <h3>Teacher's Mark</h3>
+                        <div class="form-check">
+                            <input <?= $my_mark == 1 ? ' checked ' : '' ?> class="form-check-input" value="1" type="radio" name="<?= $question->id ?>" id="radioDefaultcorrect<?= $num ?>">
+                            <label class="form-check-label" for="radioDefaultcorrect<?= $num ?>">
+                                Correct
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input <?= $my_mark == 2 ? ' checked ' : '' ?> class="form-check-input" value="2" type="radio" name="<?= $question->id ?>" id="radioDefaultwrong<?= $num ?>">
+                            <label class="form-check-label" for="radioDefaultwrong<?= $num ?>">
+                                Wrong
+                            </label>
+                        </div>
                     <?php endif; ?>
 
 
@@ -109,10 +155,24 @@
                                                 <?php endif; ?>
                                             <?php endif; ?>
                                         </label>
+
                                     </li>
                                 <?php endforeach; ?>
-
                             </ul>
+                        </div>
+                        <hr>
+                        <h3>Teacher's Mark</h3>
+                        <div class="form-check">
+                            <input <?= $my_mark == 1 ? ' checked ' : '' ?> class="form-check-input" value="1" type="radio" name="<?= $question->id ?>" id="radioDefaultcorrect<?= $num ?>">
+                            <label class="form-check-label" for="radioDefaultcorrect<?= $num ?>">
+                                Correct
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input <?= $my_mark == 2 ? ' checked ' : '' ?> class="form-check-input" value="2" type="radio" name="<?= $question->id ?>" id="radioDefaultwrong<?= $num ?>">
+                            <label class="form-check-label" for="radioDefaultwrong<?= $num ?>">
+                                Wrong
+                            </label>
                         </div>
                     <?php endif; ?>
 
@@ -122,10 +182,10 @@
 
 
         <?php endforeach; ?>
-        <?php if (!$submitted): ?>
+        <?php if (!$marked): ?>
             <center>
-                <small>Click save answer before moving to another page to save your answer</small> <br>
-                <button class="btn btn-primary">Save Answer</button>
+                <small>Click save marks before moving to another page</small> <br>
+                <button class="btn btn-primary">Save Marks</button>
             </center>
         <?php endif; ?>
     </form>

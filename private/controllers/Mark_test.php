@@ -9,6 +9,9 @@ class Mark_test extends Controller
         if (!Auth::authenticated()) {
             $this->redirect('login');
         }
+        if (!Auth::access('lecturer')) {
+            $this->redirect('access_denied');
+        }
 
         $errors = array();
         $tests = new Tests_model;
@@ -16,7 +19,7 @@ class Mark_test extends Controller
         $data = $tests->whereOne('id', $id);
         $answers = new Answers_model;
 
-        $query = 'select question_id,answer from answers where test_id = :id and user_id = :user_id';
+        $query = 'select question_id,answer,answer_mark from answers where test_id = :id and user_id = :user_id';
         $saved_ans = $answers->query($query, ['id' => $id, 'user_id' => $users_id]);
 
 
@@ -34,50 +37,30 @@ class Mark_test extends Controller
         //something was posted
         if (count($_POST) > 0) {
 
-
             //saved answers
-
-
-            $arr_ans['test_id'] = $id;
-            $arr_ans['user_id'] = $users_id;
-
-
-            $query = 'select id from answered_tests where test_id = :test_id and user_id = :user_id limit 1';
-            $check = $db->query($query, $arr_ans);
-
-            if (!$check) {
-                $arr_ans['date'] = date("Y-m-d H:i:s");
-                $query = 'insert into answered_tests (test_id,user_id,date) values (:test_id,:user_id,:date)';
-                $db->query($query, $arr_ans);
-            }
-
             $data = $_POST;
 
-
             // Accessing the nested answers array
-            if (isset($data['answer']) && is_array($data['answer'])) {
-                foreach ($data['answer'] as $question_id => $user_answer) {
+            if (isset($data) && is_array($data)) {
+                foreach ($data as $question_id => $user_answer) {
                     $insertData = [
                         'test_id' => $id,
-                        'date' => date("Y-m-d H:i:s"),
                         'user_id' => $users_id,
                         'question_id' => $question_id,
-                        'answer' => $user_answer
+                        'answer_mark' => $user_answer
                     ];
 
-                    $query = 'SELECT id FROM answers WHERE test_id = :test_id AND user_id = :user_id AND question_id = :question_id LIMIT 1';
+                    $query = 'SELECT id FROM answers WHERE test_id = :test_id AND user_id = :user_id AND question_id = :question_id';
                     $arr = [
                         'test_id' => $insertData['test_id'],
                         'user_id' => $insertData['user_id'],
                         'question_id' => $insertData['question_id']
                     ];
                     $res = $answers->query($query, $arr);
-                    if (!$res) {
-                        $answers->insert($insertData);
-                    } else {
+                    if ($res) {
                         $answer_id = $res[0]->id;
-                        $arr = ['answer' => $insertData['answer']];
-                        $answers->update($answer_id, $arr);
+                        $arr1 = ['answer_mark' => $insertData['answer_mark']];
+                        $answers->update($answer_id, $arr1);
                     }
                 }
             }
@@ -86,7 +69,7 @@ class Mark_test extends Controller
             if (isset($_GET['page']) && is_numeric($_GET['page'])) {
                 $page_number = '&page=' . $_GET['page'];
             }
-            $this->redirect('take_test/' . $id . $page_number);
+            $this->redirect('mark_test/' . $id . '/' . $users_id . $page_number);
         }
 
         $limit = 2;
@@ -102,14 +85,24 @@ class Mark_test extends Controller
 
 
         //if a test is submitted
-        if (isset($_GET['submit']) && $_GET['submit'] == 'true') {
-            $arr_anss['submitted_date'] = date("Y-m-d H:i:s");
-            $arr_anss['submitted'] = 1;
+        if (isset($_GET['unsubmit']) && $_GET['unsubmit'] == 'true') {
+            $arr_anss['submitted_date'] = '';
+            $arr_anss['submitted'] = 0;
             $arr_anss['test_id'] = $id;
             $arr_anss['user_id'] = $users_id;
             $query = 'update answered_tests set submitted = :submitted, submitted_date = :submitted_date where test_id = :test_id and user_id = :user_id limit 1';
             $db->query($query, $arr_anss);
-            $this->redirect('take_test/' . $id);
+        }
+
+        //set test as marked
+        if (isset($_GET['set_as_mark']) && $_GET['set_as_mark'] == 'true') {
+            $arr_anss['marked_date'] = date("Y-m-d H:i:s");
+            $arr_anss['marked'] = 1;
+            $arr_anss['test_id'] = $id;
+            $arr_anss['user_id'] = $users_id;
+            $arr_anss['marked_by'] = Auth::getUser_id();
+            $query = 'update answered_tests set marked = :marked, marked_date = :marked_date, marked_by = :marked_by where test_id = :test_id and user_id = :user_id limit 1';
+            $db->query($query, $arr_anss);
         }
 
 
@@ -121,9 +114,17 @@ class Mark_test extends Controller
             $datas['submitted'] = true;
         }
 
+        $datas['marked'] = false;
+        if (isset($datas['answered_test_row']->marked) && $datas['answered_test_row']->marked == 1) {
+            $datas['marked'] = true;
+        }
+
         //get student information 
-        $user = new User();
-        $datas['student_row'] = $user->whereOne('user_id', $datas['answered_test_row']->user_id);
+        if ($datas['answered_test_row']) {
+            $user = new User();
+            $datas['student_row'] = $user->whereOne('user_id', $datas['answered_test_row']->user_id);
+        }
+
 
         $datas['test'] = $data;
         $datas['questions'] = $questions;
@@ -135,6 +136,7 @@ class Mark_test extends Controller
         $datas['pager'] = $pager;
         $datas['saved_ans'] = $saved_ans;
         $datas['all_questions'] = $all_questions;
+        $datas['user_id'] = $users_id;
 
 
 

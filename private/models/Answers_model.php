@@ -11,6 +11,8 @@ class Answers_model extends Model
         'test_id',
         'user_id',
         'answer',
+        'answer_mark',
+        'answer_comment'
     ];
     protected $beforeInsert = [];
     protected $afterSelect = [];
