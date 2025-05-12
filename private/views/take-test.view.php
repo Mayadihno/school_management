@@ -2,7 +2,7 @@
 <?php $this->view('includes/nav'); ?>
 
 <div class="container-fluid p-4 shadow mt-5" style="max-width: 1000px; margin: auto;">
-    <?php if (isset($test) && !$test->disabled) :  ?>
+    <?php if (isset($test) && !$test->disabled) :   ?>
         <?php $this->view('includes/crumbs', ['crumbs' => $crumbs]); ?>
         <h4 class="">Test Profile</h4>
         <div class="row my-3">

@@ -39,14 +39,30 @@ class Classes extends Controller
             }
 
             $arr['stud_classes'] = $class->query($query, $arr);
+            // show($arr['stud_classes']);
+            //680a54f67e2106tvl91JAE0O8hGMFRaqfNZHKV2rXCUxiTLmjpWbB
 
-            $data = [];
-            if (isset($arr['stud_classes']) && !empty($arr['stud_classes'])) {
-                foreach ($arr['stud_classes'] as $stud_class) {
-                    $data[]  = $class->whereOne('id', $stud_class->class_id);
+            //get ids from classes i own and classes i am in that doesnt have a member yet
+            $class_i_own = $class->where('user_id', Auth::getUser_id());
+            // show($class_i_own);
+
+            if ($class_i_own &&  $arr['stud_classes']) {
+                $arr['stud_classes'] = array_merge($arr['stud_classes'], $class_i_own);
+            }
+
+            $data = array();
+            if ($arr['stud_classes']) {
+
+                $all_classes = array_column($arr['stud_classes'], 'class_id');
+                $all_classes = array_unique($all_classes);
+
+                foreach ($all_classes as $class_id) {
+                    $data[] = $class->whereOne('class_id', $class_id);
                 }
             }
         }
+
+        // show($data);
 
         $crumbs[] = ['Dashboard', ''];
         $crumbs[] = ['Classes', 'classes'];

@@ -21,8 +21,6 @@ class Tests extends Controller
             }
             $data =  $test->query($query, $arr);
         } else {
-
-
             $my_table = "class_students";
             $disabled = '&& disabled = 0';
 

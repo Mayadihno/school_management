@@ -115,6 +115,7 @@ class Take_test extends Controller
         //get answered test row
         $datas['answered_test_row'] = $tests->get_answered_test($id, Auth::getUser_id());
 
+
         $datas['submitted'] = false;
         if (isset($datas['answered_test_row']->submitted) && $datas['answered_test_row']->submitted == 1) {
             $datas['submitted'] = true;
@@ -122,7 +123,7 @@ class Take_test extends Controller
 
         //get student information 
         $user = new User();
-        $datas['student_row'] = $user->whereOne('user_id', $datas['answered_test_row']->user_id);
+        $datas['student_row'] = $user->whereOne('user_id', Auth::getUser_id());
 
         $datas['test'] = $data;
         $datas['questions'] = $questions;
@@ -134,9 +135,6 @@ class Take_test extends Controller
         $datas['pager'] = $pager;
         $datas['saved_ans'] = $saved_ans;
         $datas['all_questions'] = $all_questions;
-
-
-
 
 
         $this->view('take-test', $datas);

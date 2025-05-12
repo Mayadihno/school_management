@@ -31,16 +31,16 @@
             <ul class="nav nav-tabs">
                 <li class="nav-item">
                     <a class="nav-link <?= $page_tab == 'lecturers' ? 'active' : '' ?>"
-                        aria-current="page" href="<?= ROOT ?>single_class/<?= $class->id ?>?tab=lecturers">Lecturers</a>
+                        aria-current="page" href="<?= ROOT ?>single_class/<?= $class->class_id ?>?tab=lecturers">Lecturers</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link <?= $page_tab == 'students' ? 'active' : '' ?>"
-                        href="<?= ROOT ?>single_class/<?= $class->id ?>?tab=students">Students</a>
+                        href="<?= ROOT ?>single_class/<?= $class->class_id ?>?tab=students">Students</a>
                 </li>
                 <?php if (Auth::access('lecturer')) : ?>
                     <li class="nav-item">
                         <a class="nav-link <?= $page_tab == 'tests' ? 'active' : '' ?>"
-                            href="<?= ROOT ?>single_class/<?= $class->id ?>?tab=tests">Tests</a>
+                            href="<?= ROOT ?>single_class/<?= $class->class_id ?>?tab=tests">Tests</a>
                     </li>
                 <?php endif ?>
             </ul>
@@ -52,7 +52,7 @@
                     include(view_path('class-tab-lecturers'));
                     break;
                 case 'lecturers-add':
-                    if (Auth::access('admin')) {
+                    if (Auth::access('lecturer')) {
                         include(view_path('class-tab-lecturers-add'));
                     } else {
                         include(view_path('access-denied'));

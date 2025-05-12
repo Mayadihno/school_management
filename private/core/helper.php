@@ -117,12 +117,12 @@ function can_take_test($test_id)
     $data['student_classes'] = [];
     if (isset($data['stud_classes']) && !empty($data['stud_classes'])) {
         foreach ($data['stud_classes'] as $stud_class) {
-            $data['student_classes'][] = $class->whereOne('id', $stud_class->class_id);
+            $data['student_classes'][] = $class->whereOne('class_id', $stud_class->class_id);
         }
     }
     $class_ids = [];
     foreach ($data['student_classes'] as $stud_class) {
-        $class_ids[] = $stud_class->id;
+        $class_ids[] = $stud_class->class_id;
     }
     $id_string = "'" . implode("','", $class_ids) . "'";
     $query = "select * from tests where class_id in ($id_string) && disabled = 0 order by date desc";

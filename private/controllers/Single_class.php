@@ -12,7 +12,7 @@ class Single_class extends Controller
 
         $errors = array();
         $class = new Classes_model;
-        $data = $class->whereOne('id', $id);
+        $data = $class->whereOne('class_id', $id);
         $crumbs[] = ['Dashboard', ''];
         $crumbs[] = ['Classes', 'classes'];
         if ($data) {
@@ -58,7 +58,7 @@ class Single_class extends Controller
         }
         $errors = array();
         $class = new Classes_model;
-        $data = $class->whereOne('id', $id);
+        $data = $class->whereOne('class_id', $id);
         $crumbs[] = ['Dashboard', ''];
         $crumbs[] = ['Classes', 'classes'];
         if ($data) {
@@ -80,8 +80,8 @@ class Single_class extends Controller
                 }
             } else {
                 if (isset($_POST['selected'])) {
-                    $query = "select disabled,id from class_lecturers where class_id = :class_id && user_id = :user_id limit 1";
-
+                    show($_POST['selected']);
+                    $query = "select disabled,user_id from class_lecturers where class_id = :class_id && user_id = :user_id limit 1";
                     if (!$check = $lect->query($query, ['class_id' => $id, 'user_id' => $_POST['selected']])) {
                         $arr = array();
                         $arr['class_id'] = $id;
@@ -125,7 +125,7 @@ class Single_class extends Controller
         }
         $errors = array();
         $class = new Classes_model;
-        $data = $class->whereOne('id', $id);
+        $data = $class->whereOne('class_id', $id);
         $crumbs[] = ['Dashboard', ''];
         $crumbs[] = ['Classes', 'classes'];
         if ($data) {
@@ -147,7 +147,7 @@ class Single_class extends Controller
                 }
             } else {
                 if (isset($_POST['selected'])) {
-                    $query = "select disabled,id from class_students where class_id = :class_id && user_id = :user_id limit 1";
+                    $query = "select disabled,class_id from class_students where class_id = :class_id && user_id = :user_id limit 1";
 
                     if (!$check = $stud->query($query, ['class_id' => $id, 'user_id' => $_POST['selected']])) {
                         $arr = array();
@@ -194,7 +194,7 @@ class Single_class extends Controller
         }
         $errors = array();
         $class = new Classes_model;
-        $data = $class->whereOne('id', $id);
+        $data = $class->whereOne('class_id', $id);
         $crumbs[] = ['Dashboard', ''];
         $crumbs[] = ['Classes', 'classes'];
         if ($data) {
@@ -297,7 +297,7 @@ class Single_class extends Controller
         }
         $errors = array();
         $class = new Classes_model;
-        $data = $class->whereOne('id', $id);
+        $data = $class->whereOne('class_id', $id);
 
         $crumbs[] = ['Dashboard', ''];
         $crumbs[] = ['Tests', 'tests'];
@@ -317,7 +317,7 @@ class Single_class extends Controller
                 $arr['class_id'] = $id;
                 $arr['test'] = $_POST['test'];
                 $arr['description'] = $_POST['description'];
-                $arr['disabled'] = 0;
+                $arr['disabled'] = 1;
                 $arr['date'] = date('Y-m-d H:i:s');
                 $test_class->insert($arr);
                 $this->redirect('single_class/' . $id . '?tab=tests');
@@ -342,7 +342,7 @@ class Single_class extends Controller
         $errors = array();
         $class = new Classes_model;
         $test = new Tests_model();
-        $data = $class->whereOne('id', $id);
+        $data = $class->whereOne('class_id', $id);
         $test_row = $test->whereOne('test_id', $test_id);
 
         $crumbs[] = ['Dashboard', ''];
@@ -389,7 +389,7 @@ class Single_class extends Controller
         $errors = array();
         $class = new Classes_model;
         $test = new Tests_model();
-        $data = $class->whereOne('id', $id);
+        $data = $class->whereOne('class_id', $id);
         $test_row = $test->whereOne('test_id', $test_id);
 
         $crumbs[] = ['Dashboard', ''];

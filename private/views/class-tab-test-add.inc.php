@@ -13,7 +13,7 @@
          <input type="text" class="form-control mb-4" placeholder="Test Name" value="<?= get_value('test') ?>" name="test">
          <textarea name="description" id="" cols="30" rows="5" value="<?= get_value('description') ?>" class="form-control mb-4" placeholder="Test Description" id=""></textarea>
          <input type="submit" class="btn btn-primary float-end" value="Create">
-         <a href="<?= ROOT ?>single_class/<?= $class->id ?>?tab=tests">
+         <a href="<?= ROOT ?>single_class/<?= $class->class_id ?>?tab=tests">
              <input type="button" class="btn btn-danger" value="Cancle">
          </a>
      </form>

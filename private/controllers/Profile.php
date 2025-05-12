@@ -36,7 +36,7 @@ class Profile extends Controller
             $data['student_classes'] = [];
             if (isset($data['stud_classes']) && !empty($data['stud_classes'])) {
                 foreach ($data['stud_classes'] as $stud_class) {
-                    $data['student_classes'][] = $class->whereOne('id', $stud_class->class_id);
+                    $data['student_classes'][] = $class->whereOne('class_id', $stud_class->class_id);
                 }
             }
         } else  if ($data['page_tab'] == 'tests' &&  $datas) {

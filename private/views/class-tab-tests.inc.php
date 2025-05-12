@@ -5,7 +5,7 @@
              <input type="text" class="form-control" placeholder="Serach" aria-label="Search" aria-describedby="basic-addon1">
          </div>
      </form>
-     <a href="<?= ROOT ?>single_class/testadd/<?= $class->id ?>?tab=test-add">
+     <a href="<?= ROOT ?>single_class/testadd/<?= $class->class_id ?>?tab=test-add">
          <button class="btn btn-sm btn-primary"><i class="fas fa-plus pe-2"></i>Add Test</button>
      </a>
  </nav>
@@ -21,7 +21,7 @@
 
          <?php if (Auth::access('lecturer')): ?>
              <th>
-                 <a href="<?= ROOT ?>single_class/testadd/<?= $class->id ?>?tab=test-add">
+                 <a href="<?= ROOT ?>single_class/testadd/<?= $class->class_id ?>?tab=test-add">
                      <button class="btn btn-sm btn-primary"><i class="fas fa-plus pe-2"></i>Add New</button>
                  </a>
              </th>

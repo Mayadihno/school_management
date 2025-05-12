@@ -76,7 +76,7 @@ class Tests_model extends Model
         $class = new Classes_model();
         foreach ($data as $key => $value) {
             if (isset($value->class_id)) {
-                $result = $class->where('id', $value->class_id);
+                $result = $class->where('class_id', $value->class_id);
                 $data[$key]->class = is_array($result) ? $result[0] : false;
             }
             //we are setting the new data key to class to accomadate the new value

@@ -7,12 +7,12 @@
 
      </form>
 
-     <?php if (Auth::access('admin')): ?>
+     <?php if (Auth::access('lecturer')): ?>
          <div class="">
-             <a href="<?= ROOT ?>single_class/lecturersadd/<?= $class->id ?>?select=true">
+             <a href="<?= ROOT ?>single_class/lecturersadd/<?= $class->class_id ?>?select=true">
                  <button class="btn btn-sm btn-primary"><i class="fas fa-plus pe-2"></i>Add New</button>
              </a>
-             <a href="<?= ROOT ?>single_class/lecturersremove/<?= $class->id ?>?select=true">
+             <a href="<?= ROOT ?>single_class/lecturersremove/<?= $class->class_id ?>?select=true">
                  <button class="btn btn-sm btn-danger"><i class="fas fa-minus pe-2"></i>Remove</button>
              </a>
          </div>
