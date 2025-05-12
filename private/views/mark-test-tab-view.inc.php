@@ -120,7 +120,7 @@ $mark_percent = get_mark_percentage($test->id, $user_id);
                     <?php endif; ?>
                     <?php $type  = '' ?>
                     <?php if ($question->question_type != 'multiple') : ?>
-                        <input type="text" value="<?= $my_answer ?>" class="form-control" name="answer[<?= $question->id ?>]" placeholder="Your answer here">
+                        <input type="text" value="<?= $my_answer ?>" disabled class="form-control" name="answer[<?= $question->id ?>]" placeholder="Your answer here">
                         <hr>
                         <h3>Teacher's Mark</h3>
                         <?php if (!$marked): ?>

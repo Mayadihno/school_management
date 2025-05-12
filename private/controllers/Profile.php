@@ -80,10 +80,9 @@ class Profile extends Controller
                     foreach ($res as $key => $value) {
                         $test_details = $test->whereOne('id', $res[$key]->test_id);
                         $res[$key]->test_details = $test_details;
-                        $marked = array_merge($marked, $res);
                     }
                 }
-                $data['marked'] = $marked;
+                $data['marked'] =  $res;
             }
         }
 

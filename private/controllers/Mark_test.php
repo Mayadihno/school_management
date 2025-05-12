@@ -101,7 +101,8 @@ class Mark_test extends Controller
             $arr_anss['test_id'] = $id;
             $arr_anss['user_id'] = $users_id;
             $arr_anss['marked_by'] = Auth::getUser_id();
-            $query = 'update answered_tests set marked = :marked, marked_date = :marked_date, marked_by = :marked_by where test_id = :test_id and user_id = :user_id limit 1';
+            $arr_anss['score'] = get_score_percentage($id, $users_id);
+            $query = 'update answered_tests set marked = :marked, marked_date = :marked_date, marked_by = :marked_by, score=:score where test_id = :test_id and user_id = :user_id limit 1';
             $db->query($query, $arr_anss);
         }
 

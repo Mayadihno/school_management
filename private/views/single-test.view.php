@@ -13,6 +13,9 @@
                     <a href="<?= ROOT ?>single_class/<?= $test->class_id ?>?tab=tests">
                         <button class="btn btn-sm btn-primary"><i class="fas fa-chevron-right pe-2"></i>View Class</button>
                     </a>
+                    <a href="<?= ROOT ?>single_test/<?= $test->id ?>?tab=scores">
+                        <button class="btn btn-sm btn-primary"><i class="fas fa-chevron-right pe-2"></i>View Scores</button>
+                    </a>
                 </div>
                 <table class="table table-hover table-bordered table-striped">
                     <tr>
@@ -70,6 +73,9 @@
                     break;
                 case 'delete':
                     include(view_path('test-tab-delete'));
+                    break;
+                case 'scores':
+                    include(view_path('test-tab-scores'));
                     break;
 
                 default:

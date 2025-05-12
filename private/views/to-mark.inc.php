@@ -8,6 +8,7 @@
              <th>Taken by</th>
              <th>Submitted Date</th>
              <th>Answered</th>
+             <th>Marked</th>
              <th></th>
 
 
@@ -41,6 +42,20 @@
                             ?>
                          <?= $percent ?>% (<?= $percent_text ?>)
 
+                     </td>
+                     <td>
+                         <?php
+                            $percent = get_mark_percentage($test->test_id, $test->user_id);
+                            $percent_text = '';
+                            if ($percent == 0) {
+                                $percent_text = 'Not yet marked';
+                            } else if ($percent == 100) {
+                                $percent_text = 'Completed';
+                            } else if ($percent < 100 && $percent > 0) {
+                                $percent_text = 'Partially completed';
+                            }
+                            ?>
+                         <?= $percent ?>% (<?= $percent_text ?>)
                      </td>
                      <td>
                          <?php if (can_take_test($test->test_id)): ?>

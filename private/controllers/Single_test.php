@@ -39,6 +39,14 @@ class Single_test extends Controller
         $offset = $pager->offset;
         $page_tab = 'view';
 
+        $student_scores = false;
+        if (isset($_GET['tab']) && $_GET['tab'] == 'scores') {
+            $page_tab = 'scores';
+            $answered_test = new Answered_test();
+            $student_scores = $answered_test->query('select * from answered_tests where submitted = 1 and marked = 1 and test_id = :id order by score desc ', ['id' => $id,]);
+        }
+        $datas['student_scores'] = $student_scores;
+
         $testss = $tests->where('id', $id);
         $questions = $question->where('test_id', $testss[0]->test_id,);
 
