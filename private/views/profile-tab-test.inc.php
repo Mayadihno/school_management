@@ -7,4 +7,10 @@
         </div>
     </form>
 </nav>
-<?php include(view_path('tests')) ?>
+
+
+<?php if ($user->rank == 'student') : ?>
+    <?php include(view_path('marked')) ?>
+<?php else: ?>
+    <?php include(view_path('tests')) ?>
+<?php endif ?>

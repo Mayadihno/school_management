@@ -10,6 +10,7 @@ class Profile extends Controller
             $this->redirect('login');
         }
         $user = new User();
+        $test = new Tests_model();
         $datas = $user->whereOne('user_id', $id);
         $rows = $user->whereOne('user_id', $id);
         $crumbs[] = ['Dashboard', ''];
@@ -39,40 +40,58 @@ class Profile extends Controller
                 }
             }
         } else  if ($data['page_tab'] == 'tests' &&  $datas) {
-            $class = new Classes_model();
-            $my_table = "class_students";
-            $disabled = '&& disabled = 0';
+            if ($datas->rank != 'student') {
+                $class = new Classes_model();
+                $my_table = "class_students";
+                $disabled = '&& disabled = 0';
 
-            if ($datas->rank == 'lecturer') {
-                $my_table = "class_lecturers";
-                $disabled = '';
-            }
-
-            $query = "select * from $my_table where user_id = :user_id && disabled = 0";
-
-            $data['stud_classes'] = $class->query($query, ['user_id' => $id]);
-
-            $data['student_classes'] = [];
-            if (isset($data['stud_classes']) && !empty($data['stud_classes'])) {
-                foreach ($data['stud_classes'] as $stud_class) {
-                    $data['student_classes'][] = $class->whereOne('id', $stud_class->class_id);
+                if ($datas->rank == 'lecturer') {
+                    $my_table = "class_lecturers";
+                    $disabled = '';
                 }
+
+                $query = "select * from $my_table where user_id = :user_id && disabled = 0";
+
+                $data['stud_classes'] = $class->query($query, ['user_id' => $id]);
+
+                $data['student_classes'] = [];
+                if (isset($data['stud_classes']) && !empty($data['stud_classes'])) {
+                    foreach ($data['stud_classes'] as $stud_class) {
+                        $data['student_classes'][] = $class->whereOne('id', $stud_class->class_id);
+                    }
+                }
+                // show($data['student_classes']);
+                $class_ids = [];
+                foreach ($data['student_classes'] as $stud_class) {
+                    $class_ids[] = $stud_class->id;
+                }
+                $id_string = "'" . implode("','", $class_ids) . "'";
+                $query = "select * from tests where class_id in ($id_string) $disabled order by date desc";
+                $test_model = new Tests_model();
+                $tests = $test_model->query($query, []);
+                $data['tests'] = $tests;
+            } else {
+                $marked = [];
+
+                $query = "select * from answered_tests where user_id = :user_id && submitted = 1 && marked = 1 order by date desc";
+                $res = $test->query($query, ['user_id' => $id]);
+
+                if (is_array($res) && count($res) > 0) {
+                    foreach ($res as $key => $value) {
+                        $test_details = $test->whereOne('id', $res[$key]->test_id);
+                        $res[$key]->test_details = $test_details;
+                        $marked = array_merge($marked, $res);
+                    }
+                }
+                $data['marked'] = $marked;
             }
-            // show($data['student_classes']);
-            $class_ids = [];
-            foreach ($data['student_classes'] as $stud_class) {
-                $class_ids[] = $stud_class->id;
-            }
-            $id_string = "'" . implode("','", $class_ids) . "'";
-            $query = "select * from tests where class_id in ($id_string) $disabled order by date desc";
-            $test_model = new Tests_model();
-            $tests = $test_model->query($query, []);
-            $data['tests'] = $tests;
         }
+
 
 
         $data['crumbs'] = $crumbs;
         $data['user'] = $datas;
+
 
 
         if (Auth::access('reception') || Auth::i_own_content($rows)) {

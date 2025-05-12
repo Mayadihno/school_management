@@ -1,6 +1,7 @@
 <?php
 
-class Mark_test extends Controller
+
+class Marked_single extends Controller
 {
 
     public function index($id = '', $users_id = '')
@@ -9,9 +10,10 @@ class Mark_test extends Controller
         if (!Auth::authenticated()) {
             $this->redirect('login');
         }
-        if (!Auth::access('lecturer')) {
+        if (!Auth::access('student')) {
             $this->redirect('access_denied');
         }
+
 
         $errors = array();
         $tests = new Tests_model;
@@ -142,6 +144,6 @@ class Mark_test extends Controller
 
 
 
-        $this->view('mark-test', $datas);
+        $this->view('marked-single', $datas);
     }
 }

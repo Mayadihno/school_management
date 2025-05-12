@@ -10,6 +10,7 @@
              <th>Submitted Date</th>
              <th>Marked Date</th>
              <th>Answered</th>
+             <th>Score</th>
              <th></th>
 
 
@@ -21,16 +22,22 @@
                  <tr>
                      <?php if (Auth::access('lecturer')): ?>
                          <td>
-                             <a href="<?= ROOT ?>single_test/<?= $test->id ?>">
+                             <a href="<?= ROOT ?>marked_single/<?= $test->test_details->id ?>/<?= $test->user->user_id ?>">
                                  <button class="btn btn-primary btn-sm">View test <i class="fa fa-chevron-right"></i></button>
                              </a>
                          </td>
                      <?php endif; ?>
                      <td><?= $test->test_details->test ?></td>
                      <td><?= $test->user->lastname ?> <?= $test->user->firstname ?> </td>
-                     <td><?= $test->user->lastname ?> <?= $test->user->firstname ?> </td>
+                     <td class="">
+                         <?php
+                            $user = new User();
+                            $marked_by = $user->whereOne('user_id', $test->marked_by);
+                            echo $marked_by->lastname . ' ' . $marked_by->firstname;
+                            ?>
+                     </td>
                      <td><?= get_date($test->submitted_date) ?></td>
-                     <td><?= get_date($test->submitted_date) ?></td>
+                     <td><?= get_date($test->marked_date) ?></td>
                      <td>
                          <?php
                             $percent = get_answer_percentage($test->test_id, $test->user_id);
@@ -44,7 +51,9 @@
                             }
                             ?>
                          <?= $percent ?>% (<?= $percent_text ?>)
-
+                     </td>
+                     <td>
+                         <?= $test_score = get_score_percentage($test->test_details->id, $test->user->user_id); ?> %
                      </td>
                      <td>
                          <?php if (can_take_test($test->test_id)): ?>
@@ -52,7 +61,6 @@
                                  <button class="btn btn-sm btn-primary"><i class="fas fa-edit pe-2"></i>Take this test</button>
                              </a>
                          <?php endif; ?>
-
 
                      </td>
 

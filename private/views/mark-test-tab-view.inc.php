@@ -26,7 +26,7 @@ $mark_percent = get_mark_percentage($test->id, $user_id);
                     onclick="event.preventDefault(); document.getElementById('automarkTestModalConfirm').setAttribute('href', this.href);">
                     <button class="btn btn-secondary btn-sm">Auto Mark test</button>
                 </a>
-                <a href="<?= ROOT ?>mark_test/<?= $test->id ?>/<?= $user_id ?>?set_as_mark=true"
+                <a onclick="show_loader(event)" href="<?= ROOT ?>mark_test/<?= $test->id ?>/<?= $user_id ?>?set_as_mark=true"
                     <button class="btn btn-success btn-sm">Set Test as marked</button>
                 </a>
             </div>
@@ -75,6 +75,18 @@ $mark_percent = get_mark_percentage($test->id, $user_id);
     </div>
 
 </div>
+
+<?php if ($marked) : ?>
+    <?php $test_score = get_score_percentage($test->id, $user_id); ?>
+    <center>
+        <?php if ($test_score > 50) : ?>
+            <h5 class="text-success">Test score: <span class='fs-1'><?= $test_score ?>%</span></h5>
+        <?php else : ?>
+            <h5 class="text-danger">Test score: <span class='fs-1'><?= $test_score ?>%</span></h5>
+        <?php endif; ?>
+    </center>
+
+<?php endif; ?>
 <nav class="navbar navbar-expand-lg d-flex justify-content-between navbar-light bg-light">
     <center class="">
         <h5>Take Test</h5>
@@ -111,18 +123,33 @@ $mark_percent = get_mark_percentage($test->id, $user_id);
                         <input type="text" value="<?= $my_answer ?>" class="form-control" name="answer[<?= $question->id ?>]" placeholder="Your answer here">
                         <hr>
                         <h3>Teacher's Mark</h3>
-                        <div class="form-check">
-                            <input <?= $my_mark == 1 ? ' checked ' : '' ?> class="form-check-input" value="1" type="radio" name="<?= $question->id ?>" id="radioDefaultcorrect<?= $num ?>">
-                            <label class="form-check-label" for="radioDefaultcorrect<?= $num ?>">
-                                Correct
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input <?= $my_mark == 2 ? ' checked ' : '' ?> class="form-check-input" value="2" type="radio" name="<?= $question->id ?>" id="radioDefaultwrong<?= $num ?>">
-                            <label class="form-check-label" for="radioDefaultwrong<?= $num ?>">
-                                Wrong
-                            </label>
-                        </div>
+                        <?php if (!$marked): ?>
+                            <div class="form-check">
+                                <input <?= $my_mark == 1 ? ' checked ' : '' ?> class="form-check-input" value="1" type="radio" name="<?= $question->id ?>" id="radioDefaultcorrect<?= $num ?>">
+                                <label class="form-check-label" for="radioDefaultcorrect<?= $num ?>">
+                                    Correct
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input <?= $my_mark == 2 ? ' checked ' : '' ?> class="form-check-input" value="2" type="radio" name="<?= $question->id ?>" id="radioDefaultwrong<?= $num ?>">
+                                <label class="form-check-label" for="radioDefaultwrong<?= $num ?>">
+                                    Wrong
+                                </label>
+                            </div>
+                        <?php else: ?>
+                            <?php if ($my_mark == 1): ?>
+                                <div class="d-flex justify-content-between align-items-center w-100">
+                                    <span class="text-success">Correct</span>
+                                    <i class="fa fa-check fs-1"></i>
+                                </div>
+                            <?php else: ?>
+                                <div class="d-flex justify-content-between align-items-center w-100">
+                                    <span class="text-danger">Wrong</span>
+                                    <i class="fa-solid fa-xmark fs-1"></i>
+
+                                </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
                     <?php endif; ?>
 
 
@@ -162,18 +189,32 @@ $mark_percent = get_mark_percentage($test->id, $user_id);
                         </div>
                         <hr>
                         <h3>Teacher's Mark</h3>
-                        <div class="form-check">
-                            <input <?= $my_mark == 1 ? ' checked ' : '' ?> class="form-check-input" value="1" type="radio" name="<?= $question->id ?>" id="radioDefaultcorrect<?= $num ?>">
-                            <label class="form-check-label" for="radioDefaultcorrect<?= $num ?>">
-                                Correct
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input <?= $my_mark == 2 ? ' checked ' : '' ?> class="form-check-input" value="2" type="radio" name="<?= $question->id ?>" id="radioDefaultwrong<?= $num ?>">
-                            <label class="form-check-label" for="radioDefaultwrong<?= $num ?>">
-                                Wrong
-                            </label>
-                        </div>
+                        <?php if (!$marked): ?>
+                            <div class="form-check">
+                                <input <?= $my_mark == 1 ? ' checked ' : '' ?> class="form-check-input" value="1" type="radio" name="<?= $question->id ?>" id="radioDefaultcorrect<?= $num ?>">
+                                <label class="form-check-label" for="radioDefaultcorrect<?= $num ?>">
+                                    Correct
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input <?= $my_mark == 2 ? ' checked ' : '' ?> class="form-check-input" value="2" type="radio" name="<?= $question->id ?>" id="radioDefaultwrong<?= $num ?>">
+                                <label class="form-check-label" for="radioDefaultwrong<?= $num ?>">
+                                    Wrong
+                                </label>
+                            </div>
+                        <?php else: ?>
+                            <?php if ($my_mark == 1): ?>
+                                <div class="d-flex justify-content-between align-items-center w-100">
+                                    <span class="text-success">Correct</span>
+                                    <i class="fa fa-check fs-1"></i>
+                                </div>
+                            <?php else: ?>
+                                <div class="d-flex justify-content-between align-items-center w-100">
+                                    <span class="text-danger">Wrong</span>
+                                    <i class="fa-solid fa-xmark fs-1"></i>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
                     <?php endif; ?>
 
                 </div>
@@ -196,3 +237,15 @@ $mark_percent = get_mark_percentage($test->id, $user_id);
     </div>
 
 <?php endif; ?>
+
+<script>
+    function show_loader(e) {
+        var percent = <?= $mark_percent ?>;
+        if (percent < 100) {
+            e.preventDefault();
+            alert("Please mark all questions before submitting");
+
+        }
+
+    }
+</script>

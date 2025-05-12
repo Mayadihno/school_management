@@ -248,3 +248,37 @@ function get_mark_percentage($test_id, $user_id)
     }
     return 0;
 }
+
+function get_score_percentage($test_id, $user_id)
+{
+
+
+    $answers = new Answers_model();
+    $query = 'select question_id,answer,answer_mark from answers where test_id = :id and user_id = :user_id';
+    $saved_ans = $answers->query($query, ['id' => $test_id, 'user_id' => $user_id]);
+
+    if (empty($saved_ans)) {
+        return 0;
+    }
+
+
+    $tests = new Tests_model;
+    $testss = $tests->where('id', $test_id);
+    $quests = new Question_model();
+    $questions = $quests->query('select * from test_questions where test_id = :test_id order by date asc', ['test_id' => $testss[0]->test_id]);
+
+
+    $total_answers_count = 0;
+    if (!empty($questions)) {
+        foreach ($saved_ans as $quest) {
+            $answers = get_answer_mark($saved_ans, $quest->question_id);
+            if (trim($answers) == 1) {
+                $total_answers_count++;
+            }
+        }
+    }
+    if ($total_answers_count > 0) {
+        return round(($total_answers_count / count($questions)) * 100, 1);
+    }
+    return 0;
+}
