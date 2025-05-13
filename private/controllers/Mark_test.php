@@ -8,9 +8,9 @@ class Mark_test extends Controller
     {
         if (!Auth::authenticated()) {
             $this->redirect('login');
-        }
-        if (!Auth::access('lecturer')) {
-            $this->redirect('access_denied');
+            if (!Auth::access('lecturer')) {
+                $this->redirect('access_denied');
+            }
         }
 
         $errors = array();
@@ -83,6 +83,43 @@ class Mark_test extends Controller
         $total_questions = is_array($all_questions) ? count($all_questions) : 0;
         $results = false;
 
+
+
+
+        if (isset($_GET['auto_mark']) && $_GET['auto_mark'] == 'true') {
+            $quey = 'select test_id from tests where id = :id';
+            $test_id = $db->query($quey, ['id' => $id]);
+            $test_id = $test_id[0]->test_id;
+            $query = "select id,correct_answer from test_questions where test_id = :test_id && (question_type = 'multiple' || question_type = 'objective')";
+            $original_questions = $db->query($query, [
+                'test_id' => $test_id,
+            ]);
+
+            foreach ($original_questions as $question_row) {
+                // code...
+                $query = "select id,answer from answers where user_id = :user_id && test_id = :test_id && question_id = :question_id limit 1";
+                $answer_row = $tests->query($query, [
+                    'user_id' => $users_id,
+                    'test_id' => $id,
+                    'question_id' => $question_row->id,
+                ]);
+                if ($answer_row) {
+
+                    $answer_row = $answer_row[0];
+                    $correct = strtolower(trim($question_row->correct_answer));
+                    $student_answer = strtolower(trim($answer_row->answer));
+
+                    if ($correct == $student_answer) {
+                        //this answer is correct
+                        $answers->update($answer_row->id, ['answer_mark' => 1]);
+                    } else {
+                        //answer is wrong
+                        $answers->update($answer_row->id, ['answer_mark' => 2]);
+                    }
+                }
+            }
+            
+        }
 
         //if a test is submitted
         if (isset($_GET['unsubmit']) && $_GET['unsubmit'] == 'true') {

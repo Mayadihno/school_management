@@ -29,31 +29,38 @@ class Tests extends Controller
                 $disabled = '';
             }
 
-            $query = "select * from $my_table where user_id = :user_id $disabled";
-
+            $query = "select * from tests where class_id in (select class_id from $my_table where user_id = :user_id $disabled) $disabled order by date desc";
             $arr['user_id'] = Auth::getUser_id();
+            $data = $test->query($query, $arr);
 
-            $arr['stud_tests'] = $test->query($query, $arr);
-
-            $data = [];
-            $arr2 = [];
-            if (isset($arr['stud_tests']) && !empty($arr['stud_tests'])) {
-                foreach ($arr['stud_tests'] as $stud_test) {
-                    $query = "select * from tests where class_id = :class_id $disabled order by date desc";
-                    $arr2['class_id'] = $stud_test->class_id;
-
-                    if (isset($_GET['find'])) {
-                        $find = '%' . $_GET['find'] . '%';
-                        $query = "select * from tests where class_id = :class_id $disabled && (test like :find) order by date desc";
-                        $arr2['find'] = $find;
-                    }
-
-                    $res = $test->query($query, $arr2);
-                    if (is_array($res) && count($res) > 0) {
-                        $data = array_merge($data, $res);
-                    }
-                }
+            if (isset($_GET['find'])) {
+                $find = '%' . $_GET['find'] . '%';
+                $query = "select * from tests where class_id in (select class_id from $my_table where user_id = :user_id $disabled) $disabled && test like :find order by date desc";
+                $arr['find'] = $find;
             }
+            $data = $test->query($query, $arr);
+
+
+
+            // $data = [];
+            // $arr2 = [];
+            // if (isset($arr['stud_tests']) && !empty($arr['stud_tests'])) {
+            //     foreach ($arr['stud_tests'] as $stud_test) {
+            //         $query = "select * from tests where class_id = :class_id $disabled order by date desc";
+            //         $arr2['class_id'] = $stud_test->class_id;
+
+            //         if (isset($_GET['find'])) {
+            //             $find = '%' . $_GET['find'] . '%';
+            //             $query = "select * from tests where class_id = :class_id $disabled && (test like :find) order by date desc";
+            //             $arr2['find'] = $find;
+            //         }
+
+            //         $res = $test->query($query, $arr2);
+            //         if (is_array($res) && count($res) > 0) {
+            //             $data = array_merge($data, $res);
+            //         }
+            //     }
+            // }
         }
 
         $crumbs[] = ['Dashboard', ''];
