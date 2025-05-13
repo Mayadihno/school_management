@@ -17,7 +17,7 @@
 
          </tr>
 
-         <?php if (isset($marked) && $marked) : show($marked) ?>
+         <?php if (isset($marked) && $marked) : ?>
              <?php foreach ($marked as $test) : ?>
                  <tr>
                      <?php if (Auth::access('lecturer')): ?>

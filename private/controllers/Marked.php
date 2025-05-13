@@ -51,13 +51,14 @@ class Marked extends Controller
 
         $marked = [];
         if (count($data) > 0) {
-            foreach ($data as $stud_test) {
-                $query = "select * from answered_tests where test_id = :test_id && submitted = 1 && marked = 1 order by date desc";
-                $res = $test->query($query, ['test_id' => $stud_test->id]);
-                if (is_array($res) && count($res) > 0) {
-                    $test_details = $test->whereOne('id', $res[0]->test_id);
-                    $res[0]->test_details = $test_details;
-                    $marked = array_merge($marked, $res);
+            $all_tests = array_column($data, 'id');
+            $all_tests_string = "'" . implode("','", $all_tests) . "'";
+            $query = "select * from answered_tests where test_id in ($all_tests_string) && submitted = 1 && marked = 1 order by date desc";
+            $marked = $test->query($query);
+            if (is_array($marked)) {
+                foreach ($marked as $key => $value) {
+                    $test_details = $test->whereOne('id', $marked[$key]->test_id);
+                    $marked[$key]->test_details = $test_details;
                 }
             }
         }
