@@ -119,11 +119,11 @@ class Tests_model extends Model
             $query = "select * from $my_table where user_id = :user_id && disabled = 0";
 
             $arr['user_id'] = Auth::getUser_id();
-            if (isset($_GET['find'])) {
-                $find = '%' . $_GET['find'] . '%';
-                $query = "select tests.test, {$my_table}.* from $my_table join tests on tests.id = {$my_table}.test_id where {$my_table}.user_id = :user_id && {$my_table}.disabled = 0 && tests.test like :find order by tests.date desc";
-                $arr['find'] = $find;
-            }
+            // if (isset($_GET['find'])) {
+            //     $find = '%' . $_GET['find'] . '%';
+            //     $query = "select tests.test, {$my_table}.* from $my_table join tests on tests.id = {$my_table}.test_id where {$my_table}.user_id = :user_id && {$my_table}.disabled = 0 && tests.test like :find order by tests.date desc";
+            //     $arr['find'] = $find;
+            // }
 
             $arr['stud_tests'] = $this->query($query, $arr);
 

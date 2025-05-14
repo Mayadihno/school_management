@@ -42,6 +42,7 @@ class Profile extends Controller
         } else  if ($data['page_tab'] == 'tests' &&  $datas) {
             if ($datas->rank != 'student') {
                 $class = new Classes_model();
+                $test_model = new Tests_model();
                 $my_table = "class_students";
                 $disabled = '&& disabled = 0';
 
@@ -50,26 +51,33 @@ class Profile extends Controller
                     $disabled = '';
                 }
 
-                $query = "select * from $my_table where user_id = :user_id && disabled = 0";
-
-                $data['stud_classes'] = $class->query($query, ['user_id' => $id]);
-
-                $data['student_classes'] = [];
-                if (isset($data['stud_classes']) && !empty($data['stud_classes'])) {
-                    foreach ($data['stud_classes'] as $stud_class) {
-                        $data['student_classes'][] = $class->whereOne('id', $stud_class->class_id);
-                    }
+                $query = "select * from tests where class_id in (select class_id from $my_table where user_id = :user_id && disabled = 0) $disabled order by date desc";
+                $arr['user_id'] = $id;
+                if (isset($_GET['find'])) {
+                    $find = '%' . $_GET['find'] . '%';
+                    $query = "select * from tests where class_id in (select class_id from $my_table where user_id = :user_id && disabled = 0) $disabled && test like :find order by date desc";
+                    $arr['find'] = $find;
                 }
-                // show($data['student_classes']);
-                $class_ids = [];
-                foreach ($data['student_classes'] as $stud_class) {
-                    $class_ids[] = $stud_class->id;
-                }
-                $id_string = "'" . implode("','", $class_ids) . "'";
-                $query = "select * from tests where class_id in ($id_string) $disabled order by date desc";
-                $test_model = new Tests_model();
-                $tests = $test_model->query($query, []);
-                $data['tests'] = $tests;
+
+                $data['tests']  = $test_model->query($query, $arr);
+
+
+                // $data['student_classes'] = [];
+                // if (isset($data['stud_classes']) && !empty($data['stud_classes'])) {
+                //     foreach ($data['stud_classes'] as $stud_class) {
+                //         $data['student_classes'][] = $class->whereOne('class_id', $stud_class->class_id);
+                //     }
+                // }
+
+                // $class_ids = [];
+                // foreach ($data['student_classes'] as $stud_class) {
+                //     $class_ids[] = $stud_class->class_id;
+                // }
+                // $id_string = "'" . implode("','", $class_ids) . "'";
+                // $query = "select * from tests where class_id in ($id_string) $disabled order by date desc";
+                // $test_model = new Tests_model();
+                // $tests = $test_model->query($query, []);
+                // $data['tests'] = $tests;
             } else {
                 $marked = [];
 

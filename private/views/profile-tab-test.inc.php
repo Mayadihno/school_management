@@ -3,7 +3,9 @@
     <form class="container-fluid">
         <div class="input-group">
             <span class="input-group-text" id="basic-addon1"><i class="fa fa-search"></i></span>
-            <input type="text" class="form-control" placeholder="Serach" aria-label="Search" aria-describedby="basic-addon1">
+            <input value="<?= !empty($_GET['find']) ? $_GET['find'] : '' ?>" type="text" name="find" class="form-control" placeholder="Serach" aria-label="Search" aria-describedby="basic-addon1">
+            <input type="hidden" name="tab" value="tests">
+
         </div>
     </form>
 </nav>
