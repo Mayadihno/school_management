@@ -56,11 +56,9 @@
                          <?= $test_score = get_score_percentage($test->test_details->id, $test->user->user_id); ?> %
                      </td>
                      <td>
-                         <?php if (can_take_test($test->test_id)): ?>
-                             <a href="<?= ROOT ?>take_test/<?= $test->id ?>">
-                                 <button class="btn btn-sm btn-primary"><i class="fas fa-edit pe-2"></i>Take this test</button>
-                             </a>
-                         <?php endif; ?>
+                         <a href="<?= ROOT ?>marked_single/<?= $test->test_details->id ?>/<?= $test->user->user_id ?>">
+                             <button class="btn btn-primary btn-sm">View test <i class="fa fa-chevron-right"></i></button>
+                         </a>
 
                      </td>
 

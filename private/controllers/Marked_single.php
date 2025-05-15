@@ -29,50 +29,10 @@ class Marked_single extends Controller
         $crumbs[] = ['Tests', 'tests'];
         if ($data) {
             $crumbs[] = [$data->test, 'tests'];
-            if (!$data->disabled) {
-                $query = 'update tests set editable = 0 where id = :id limit 1';
-                $tests->query($query, ['id' => $data->id]);
-            }
         }
         $db =  new Database();
 
         //something was posted
-        if (count($_POST) > 0) {
-
-            //saved answers
-            $data = $_POST;
-
-            // Accessing the nested answers array
-            if (isset($data) && is_array($data)) {
-                foreach ($data as $question_id => $user_answer) {
-                    $insertData = [
-                        'test_id' => $id,
-                        'user_id' => $users_id,
-                        'question_id' => $question_id,
-                        'answer_mark' => $user_answer
-                    ];
-
-                    $query = 'SELECT id FROM answers WHERE test_id = :test_id AND user_id = :user_id AND question_id = :question_id';
-                    $arr = [
-                        'test_id' => $insertData['test_id'],
-                        'user_id' => $insertData['user_id'],
-                        'question_id' => $insertData['question_id']
-                    ];
-                    $res = $answers->query($query, $arr);
-                    if ($res) {
-                        $answer_id = $res[0]->id;
-                        $arr1 = ['answer_mark' => $insertData['answer_mark']];
-                        $answers->update($answer_id, $arr1);
-                    }
-                }
-            }
-
-            $page_number = '&page=1';
-            if (isset($_GET['page']) && is_numeric($_GET['page'])) {
-                $page_number = '&page=' . $_GET['page'];
-            }
-            $this->redirect('mark_test/' . $id . '/' . $users_id . $page_number);
-        }
 
         $limit = 2;
         $pager = new Pager($limit);
@@ -85,27 +45,6 @@ class Marked_single extends Controller
         $total_questions = is_array($all_questions) ? count($all_questions) : 0;
         $results = false;
 
-
-        //if a test is submitted
-        if (isset($_GET['unsubmit']) && $_GET['unsubmit'] == 'true') {
-            $arr_anss['submitted_date'] = '';
-            $arr_anss['submitted'] = 0;
-            $arr_anss['test_id'] = $id;
-            $arr_anss['user_id'] = $users_id;
-            $query = 'update answered_tests set submitted = :submitted, submitted_date = :submitted_date where test_id = :test_id and user_id = :user_id limit 1';
-            $db->query($query, $arr_anss);
-        }
-
-        //set test as marked
-        if (isset($_GET['set_as_mark']) && $_GET['set_as_mark'] == 'true'  && get_mark_percentage($id, $users_id) == 100) {
-            $arr_anss['marked_date'] = date("Y-m-d H:i:s");
-            $arr_anss['marked'] = 1;
-            $arr_anss['test_id'] = $id;
-            $arr_anss['user_id'] = $users_id;
-            $arr_anss['marked_by'] = Auth::getUser_id();
-            $query = 'update answered_tests set marked = :marked, marked_date = :marked_date, marked_by = :marked_by where test_id = :test_id and user_id = :user_id limit 1';
-            $db->query($query, $arr_anss);
-        }
 
 
         //get answered test row

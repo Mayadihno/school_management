@@ -92,7 +92,6 @@ class Tests_model extends Model
         $arr = ['test_id' => $test_id, 'user_id' => $user_id];
 
         $query = "select * from answered_tests where test_id = :test_id && user_id = :user_id limit 1";
-
         $res = $db->query($query, $arr);
 
 
