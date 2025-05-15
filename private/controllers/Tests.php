@@ -65,6 +65,10 @@ class Tests extends Controller
 
         $crumbs[] = ['Dashboard', ''];
         $crumbs[] = ['Tests', 'tests'];
-        $this->view('tests', ['tests' => $data, 'crumbs' => $crumbs]);
+        $this->view('tests', [
+            'tests' => $data,
+            'crumbs' => $crumbs,
+            'unsubmitted' => get_unsubmitted_test_rows()
+        ]);
     }
 }

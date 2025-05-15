@@ -65,6 +65,11 @@
                         </td>
                     </tr>
                 </table>
+                <a href="<?= ROOT ?>make_pdf/<?= $test->id ?>/<?= $student_row->user_id ?>?type=test">
+                    <button class="btn btn-sm btn-primary text-uppercase float-end">
+                        save as pdf
+                    </button>
+                </a>
             </div>
         </div>
 
@@ -83,7 +88,7 @@
         </div>
 
     <?php else: ?>
-        <div class="text-center ">
+        <div class=" text-center ">
             <h4>
                 No Test found
             </h4>

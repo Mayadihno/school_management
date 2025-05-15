@@ -11,13 +11,13 @@ class Make_test_pdf extends Controller
         $tests = new Tests_model();
         $row = $tests->whereOne('id', $id);
 
-
         $answers = new Answers_model();
         $query = "select question_id,answer,answer_mark from answers where user_id = :user_id && test_id = :test_id";
         $saved_answers = $answers->query($query, [
             'user_id' => $user_id,
             'test_id' => $id,
         ]);
+
 
         $crumbs[] = ['Dashboard', ''];
         $crumbs[] = ['tests', 'tests'];
@@ -63,7 +63,7 @@ class Make_test_pdf extends Controller
 
 ?>
 
-        <?php if ($row && $answered_test_row && $answered_test_row->submitted): show($answered_test_row) ?>
+        <?php if ($row && $answered_test_row && $answered_test_row->submitted):  ?>
 
             <style>
                 table {

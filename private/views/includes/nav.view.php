@@ -51,8 +51,18 @@
                 <li class="nav-item">
                     <a class="nav-link <?= $this->get_controller_name() == 'classes' ? 'active' : '' ?> text-uppercase" href="<?= ROOT ?>classes">classes</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item position-relative">
                     <a class="nav-link  <?= $this->get_controller_name() == 'tests' ? 'active' : '' ?> text-uppercase" href="<?= ROOT ?>tests">test</a>
+                    <?php
+
+                    $unsubmmited_count = get_unsubmitted_tests();
+                    ?>
+                    <?php if ($unsubmmited_count > 0): ?>
+                        <span class="position-absolute" style="top: -5px; right: -10px; background-color: #dc3545; color: #fff; font-size: 0.8rem; padding: 0.2rem 0.4rem; border-radius: 20%;">
+                            <?= $unsubmmited_count ?>
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                    <?php endif; ?>
                 </li>
 
                 <?php if (Auth::access('lecturer')): ?>

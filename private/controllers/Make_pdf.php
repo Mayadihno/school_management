@@ -4,11 +4,16 @@
 class Make_pdf extends Controller
 {
 
-    public function index($id = '', $users_id = '')
+    public function index($id = '', $user_id = '')
     {
         if (!Auth::authenticated()) {
             $this->redirect('login');
         }
+
+        // show($id);
+        // show($users_id);
+        // die;
+        // $user_id = $users_id;
 
         $folder = 'generated_pdfs/';
         if (!file_exists($folder)) {
