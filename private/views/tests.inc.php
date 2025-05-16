@@ -16,8 +16,11 @@
          </tr>
 
          <?php if (isset($tests) && $tests) : ?>
-             <?php foreach ($tests as $test) : ?>
-                 <tr>
+             <?php foreach ($tests as $test) :  ?>
+                 <?php
+                    $style = in_array($test->id, $unsubmitted) ? 'background-color:#eebebe !important' : '';
+                    ?>
+                 <tr style="<?= $style ?>">
                      <?php if (Auth::access('lecturer')): ?>
                          <td>
                              <a href="<?= ROOT ?>single_test/<?= $test->id ?>">
@@ -25,11 +28,11 @@
                              </a>
                          </td>
                      <?php endif; ?>
-                     <td><?= $test->test ?></td>
-                     <td><?= $test->user->lastname ?> <?= $test->user->firstname ?> </td>
-                     <td><?= $test->disabled == 0 ? 'Yes' : 'No' ?></td>
-                     <td><?= get_date($test->date) ?></td>
-                     <td>
+                     <td style="<?= $style ?>"><?= $test->test ?></td>
+                     <td style="<?= $style ?>"><?= $test->user->lastname ?> <?= $test->user->firstname ?> </td>
+                     <td style="<?= $style ?>"><?= $test->disabled == 0 ? 'Yes' : 'No' ?></td>
+                     <td style="<?= $style ?>"><?= get_date($test->date) ?></td>
+                     <td style="<?= $style ?>">
                          <?php
 
                             $myId = $this::class == 'Profile' ? $user->user_id : Auth::getUser_id();
@@ -46,7 +49,7 @@
                          <?= $percent ?>% (<?= $percent_text ?>)
 
                      </td>
-                     <td>
+                     <td style="<?= $style ?>">
                          <?php if (can_take_test($test->test_id)): ?>
                              <a href="<?= ROOT ?>take_test/<?= $test->id ?>">
                                  <button class="btn btn-sm btn-primary"><i class="fas fa-edit pe-2"></i>Take this test</button>

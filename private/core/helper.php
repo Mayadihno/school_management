@@ -287,8 +287,8 @@ function get_unsubmitted_test_rows()
 {
     if (Auth::getRank() == "student") {
         $tests_class = new Tests_model();
-        $query = "select test_id from tests where class_id in (select class_id from class_students where user_id = :user_id) and test_id not in (select test_id from answered_tests where user_id = :user_id && submitted = 1)";
-
+        //$query = "select test_id from tests where class_id in (select class_id from class_students where user_id = :user_id) and test_id not in (select test_id from answered_tests where user_id = :user_id && submitted = 1)";
+        $query = 'select test_id from answered_tests where user_id = :user_id and submitted = 0';
         $data = $tests_class->query($query, ['user_id' => Auth::getUser_id()]);
 
         if ($data) {
@@ -304,9 +304,12 @@ function get_unsubmitted_tests()
     if (Auth::getRank() == "student") {
 
         $tests_class = new Tests_model();
-        $query = "select id from tests where class_id in (select class_id from class_students where user_id = :user_id) and test_id not in (select test_id from answered_tests where user_id = :user_id && submitted = 1) && disabled = 0";
+        // $query = "select id from tests where class_id in (select class_id from class_students where user_id = :user_id) and test_id not in (select test_id from answered_tests where user_id = :user_id && submitted = 1) && disabled = 0";
+        $query = 'select id from answered_tests where user_id = :user_id and submitted = 0';
 
         $data = $tests_class->query($query, ['user_id' => Auth::getUser_id()]);
+        // show($data);
+
 
         if ($data) {
             return count($data);
