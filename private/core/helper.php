@@ -1,9 +1,13 @@
 <?php
 
-function get_value($key, $default = '')
+function get_value($key, $default = '', $method = 'post')
 {
-    if (isset($_POST[$key])) {
-        return $_POST[$key];
+    $data = $method;
+    if ($method == 'get') {
+        $data = $_GET;
+    }
+    if (isset($data[$key])) {
+        return $data[$key];
     }
     return $default;
 }
@@ -317,4 +321,44 @@ function get_unsubmitted_tests()
     }
 
     return 0;
+}
+
+
+function get_year()
+{
+    $arr = [];
+    $db = new Database();
+    $query = "select date from classes order by date asc limit 1";
+    $data = $db->query($query);
+    if ($data) {
+        $year = date("Y", strtotime($data[0]->date));
+        $arr[] = $year;
+        $cur_year = date("Y", time());
+
+        while ($year < $cur_year) {
+            $year++;
+            $arr[] = $year;
+        }
+    } else {
+        $year = date("Y", time());
+        $arr[] = $year;
+    }
+    rsort($arr);
+    return $arr;
+}
+
+
+switch_year();
+function switch_year()
+{
+    if (!isset($_SESSION['SCHOOL_YEAR'])) {
+        $_SESSION['SCHOOL_YEAR'] = (object)[];
+        $_SESSION['SCHOOL_YEAR']->year = date("Y", time());
+    }
+    if (!empty($_GET['school_year'])) {
+        $school_year = (int) $_GET['school_year'];
+        $_SESSION['SCHOOL_YEAR']->year = $school_year;
+    } else {
+        $_SESSION['SCHOOL_YEAR']->year = date("Y", time());
+    }
 }

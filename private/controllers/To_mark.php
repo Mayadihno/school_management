@@ -14,9 +14,9 @@ class To_mark extends Controller
         $school_id =  Auth::getSchool_id();
         if (Auth::access(('admin'))) {
             // $query = "select * from tests where school_id = :school_id order by date desc";
-            $query = "select * from answered_tests where test_id in (select id from tests where school_id = :school_id) && submitted = 1 && marked = 0 order by date desc";
-
+            $query = "select * from answered_tests where test_id in (select id from tests where school_id = :school_id) && submitted = 1 && marked = 0 && year(date) = :school_year order by date desc";
             $arr['school_id'] = $school_id;
+            $arr['school_year'] = !empty($_SESSION['SCHOOL_YEAR']->year) ? $_SESSION['SCHOOL_YEAR']->year : date("Y", time());
             if (isset($_GET['find'])) {
                 $find = '%' . $_GET['find'] . '%';
                 $query = "select * from tests where school_id = :school_id && (test like :find) order by date desc";
@@ -28,12 +28,13 @@ class To_mark extends Controller
             $my_table = "class_lecturers";
             // $query = "select * from $my_table where user_id = :user_id && disabled = 0";
             $arr['user_id'] = Auth::getUser_id();
-            $query = "select * from answered_tests where test_id in (select id from tests where class_id in (SELECT class_id FROM class_lecturers WHERE user_id = :user_id)) && submitted = 1 && marked = 0 order by date desc";
+            $arr['school_year'] = !empty($_SESSION['SCHOOL_YEAR']->year) ? $_SESSION['SCHOOL_YEAR']->year : date("Y", time());
+            $query = "select * from answered_tests where test_id in (select id from tests where class_id in (SELECT class_id FROM class_lecturers WHERE user_id = :user_id)) && submitted = 1 && marked = 0 && year(date) = :school_year order by date desc";
             $to_mark = $test->query($query, $arr);
 
             if (isset($_GET['find'])) {
                 $find = '%' . $_GET['find'] . '%';
-                $query = "select tests.test, {$my_table}.* from $my_table join tests on tests.id = {$my_table}.test_id where {$my_table}.user_id = :user_id && {$my_table}.disabled = 0 && tests.test like :find order by tests.date desc";
+                $query = "select tests.test, {$my_table}.* from $my_table join tests on tests.id = {$my_table}.test_id where {$my_table}.user_id = :user_id && {$my_table}.disabled = 0 && tests.test like :find && year(date) = :school_year order by tests.date desc";
                 $arr['find'] = $find;
             }
 

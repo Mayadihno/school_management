@@ -98,6 +98,22 @@
                         <li><a class="dropdown-item" href="<?= ROOT ?>logout">Logout</a></li>
                     </ul>
                 </li>
+                <form action="" class="form-inline">
+                    <div class="input-group">
+                        <?php $year = get_year(); ?>
+                        <select name="school_year" id="" class="form-select">
+                            <option><?= get_value('school_year', !empty($_SESSION['SCHOOL_YEAR']->year) ? $_SESSION['SCHOOL_YEAR']->year : date("Y", time()), "get") ?></option>
+                            <?php foreach ($year as $year) : ?>
+                                <option value="<?= $year ?>"><?= $year ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <div class="input-group-prepend">
+                            <button class="btn btn-primary input-group-text">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </ul>
         </div>
     </div>

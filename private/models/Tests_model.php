@@ -102,6 +102,7 @@ class Tests_model extends Model
     }
     public function get_to_mark_count()
     {
+        $to_mark = [];
         $school_id =  Auth::getSchool_id();
         if (Auth::access(('admin'))) {
             $query = "select * from tests where school_id = :school_id order by date desc";
@@ -140,8 +141,8 @@ class Tests_model extends Model
         }
 
         //get all submitted tests
-        $to_mark = [];
-        if (count($data) > 0) {
+        //!empty($data)
+        if (isset($data) && !empty($data)) {
             foreach ($data as $stud_test) {
                 $query = "select * from answered_tests where test_id = :test_id && submitted = 1 && marked = 0 order by date desc";
                 $res = $this->query($query, ['test_id' => $stud_test->id]);

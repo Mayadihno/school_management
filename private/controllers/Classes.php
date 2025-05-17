@@ -12,54 +12,54 @@ class Classes extends Controller
         $classes = new Classes_model();
         $school_id =  Auth::getSchool_id();
         if (Auth::access(('admin'))) {
-            $query = "select * from classes where school_id = :school_id order by date desc";
+            $query = "select * from classes where school_id = :school_id && year(date) = :school_year order by date desc";
             $arr['school_id'] = $school_id;
+            $arr['school_year'] = !empty($_SESSION['SCHOOL_YEAR']->year) ? $_SESSION['SCHOOL_YEAR']->year : date("Y", time());
             if (isset($_GET['find'])) {
                 $find = '%' . $_GET['find'] . '%';
-                $query = "select * from classes where school_id = :school_id && (class like :find) order by date desc";
+                $query = "select * from classes where school_id = :school_id && (class like :find) && year(date) = :school_year order by date desc";
                 $arr['find'] = $find;
             }
             $data =  $classes->query($query, $arr);
         } else {
-
-            $class = new Classes_model();
             $my_table = "class_students";
-
             if (Auth::getRank() == 'lecturer') {
                 $my_table = "class_lecturers";
             }
-
-            $query = "select * from $my_table where user_id = :user_id && disabled = 0";
-
+            // $query = "select * from $my_table where user_id = :user_id && disabled = 0";
+            $query = "select * from classes where (class_id in (select class_id from $my_table where user_id = :user_id && disabled = 0) && year(date) = :school_year ) || user_id = :user_id && year(date) = :school_year order by date desc";
             $arr['user_id'] = Auth::getUser_id();
+            $arr['school_year'] = !empty($_SESSION['SCHOOL_YEAR']->year) ? $_SESSION['SCHOOL_YEAR']->year : date("Y", time());
             if (isset($_GET['find'])) {
                 $find = '%' . $_GET['find'] . '%';
-                $query = "select classes.class, {$my_table}.* from $my_table join classes on classes.id = {$my_table}.class_id where {$my_table}.user_id = :user_id && {$my_table}.disabled = 0 && classes.class like :find order by classes.date desc";
+                $query = "SELECT * FROM classes WHERE ((class_id IN (SELECT class_id FROM $my_table WHERE user_id = :user_id AND disabled = 0) AND class LIKE :find) OR (user_id = :user_id AND class LIKE :find)) ORDER BY date DESC";
                 $arr['find'] = $find;
             }
 
-            $arr['stud_classes'] = $class->query($query, $arr);
+
+            $data = $classes->query($query, $arr);
+
             // show($arr['stud_classes']);
             //680a54f67e2106tvl91JAE0O8hGMFRaqfNZHKV2rXCUxiTLmjpWbB
 
             //get ids from classes i own and classes i am in that doesnt have a member yet
-            $class_i_own = $class->where('user_id', Auth::getUser_id());
-            // show($class_i_own);
+            // $class_i_own = $class->where('user_id', Auth::getUser_id());
+            // // show($class_i_own);
 
-            if ($class_i_own &&  $arr['stud_classes']) {
-                $arr['stud_classes'] = array_merge($arr['stud_classes'], $class_i_own);
-            }
+            // if ($class_i_own &&  $arr['stud_classes']) {
+            //     $arr['stud_classes'] = array_merge($arr['stud_classes'], $class_i_own);
+            // }
 
-            $data = array();
-            if ($arr['stud_classes']) {
+            // $data = array();
+            // if ($arr['stud_classes']) {
 
-                $all_classes = array_column($arr['stud_classes'], 'class_id');
-                $all_classes = array_unique($all_classes);
+            //     $all_classes = array_column($arr['stud_classes'], 'class_id');
+            //     $all_classes = array_unique($all_classes);
 
-                foreach ($all_classes as $class_id) {
-                    $data[] = $class->whereOne('class_id', $class_id);
-                }
-            }
+            //     foreach ($all_classes as $class_id) {
+            //         $data[] = $class->whereOne('class_id', $class_id);
+            //     }
+            // }
         }
 
         // show($data);
