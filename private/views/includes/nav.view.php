@@ -101,6 +101,7 @@
                 <form action="" class="form-inline">
                     <div class="input-group">
                         <?php $year = get_year(); ?>
+                        <?= add_get_vars() ?>
                         <select name="school_year" id="" class="form-select">
                             <option><?= get_value('school_year', !empty($_SESSION['SCHOOL_YEAR']->year) ? $_SESSION['SCHOOL_YEAR']->year : date("Y", time()), "get") ?></option>
                             <?php foreach ($year as $year) : ?>

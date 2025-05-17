@@ -18,7 +18,11 @@
          <?php if (isset($tests) && $tests) : ?>
              <?php foreach ($tests as $test) :  ?>
                  <?php
-                    $style = in_array($test->id, $unsubmitted) ? 'background-color:#eebebe !important' : '';
+                    $style = '';
+                    $unsubmitted = $unsubmitted ?? [];
+                    if ($unsubmitted) {
+                        $style = in_array($test->id, $unsubmitted) ? 'background-color:#eebebe !important' : '';
+                    }
                     ?>
                  <tr style="<?= $style ?>">
                      <?php if (Auth::access('lecturer')): ?>

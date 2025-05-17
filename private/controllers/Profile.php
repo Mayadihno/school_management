@@ -29,16 +29,22 @@ class Profile extends Controller
                 $my_table = "class_lecturers";
             }
 
-            $query = "select * from $my_table where user_id = :user_id && disabled = 0";
+            $query = "select * from classes where (class_id in (select class_id from $my_table where user_id = :user_id && disabled = 0) && year(date) = :school_year ) || user_id = :user_id && year(date) = :school_year order by date desc";
+            $arr['school_year'] = !empty($_SESSION['SCHOOL_YEAR']->year) ? $_SESSION['SCHOOL_YEAR']->year : date("Y", time());
+            $arr['user_id'] = $id;
+            $data['student_classes'] = $class->query($query, $arr);
 
-            $data['stud_classes'] = $class->query($query, ['user_id' => $id]);
 
-            $data['student_classes'] = [];
-            if (isset($data['stud_classes']) && !empty($data['stud_classes'])) {
-                foreach ($data['stud_classes'] as $stud_class) {
-                    $data['student_classes'][] = $class->whereOne('class_id', $stud_class->class_id);
-                }
-            }
+            // $data['student_classes'] = [];
+            // if (isset($data['stud_classes']) && !empty($data['stud_classes'])) {
+            //     foreach ($data['stud_classes'] as $stud_class) {
+            //         $data['student_classes'][] = $class->whereOne('class_id', $stud_class->class_id);
+            //     }
+            //     show($data['student_classes']);
+            // }
+            //show($data['stud_classes']);
+
+
         } else  if ($data['page_tab'] == 'tests' &&  $datas) {
             if ($datas->rank != 'student') {
                 $class = new Classes_model();
@@ -51,15 +57,19 @@ class Profile extends Controller
                     $disabled = '';
                 }
 
-                $query = "select * from tests where class_id in (select class_id from $my_table where user_id = :user_id && disabled = 0) $disabled order by date desc";
+                $query = "select * from tests where class_id in (select class_id from $my_table where user_id = :user_id $disabled) $disabled && year(date) = :school_year  order by date desc";
                 $arr['user_id'] = $id;
+                $arr['school_year'] = !empty($_SESSION['SCHOOL_YEAR']->year) ? $_SESSION['SCHOOL_YEAR']->year : date("Y", time());
                 if (isset($_GET['find'])) {
                     $find = '%' . $_GET['find'] . '%';
-                    $query = "select * from tests where class_id in (select class_id from $my_table where user_id = :user_id && disabled = 0) $disabled && test like :find order by date desc";
+                    $query = "select * from tests where class_id in (select class_id from $my_table where user_id = :user_id $disabled) $disabled && (test like :find) && year(date) = :school_year  order by date desc";
                     $arr['find'] = $find;
                 }
 
                 $data['tests']  = $test_model->query($query, $arr);
+
+
+
 
 
                 // $data['student_classes'] = [];
