@@ -241,11 +241,10 @@ $mark_percent = get_mark_percentage($test->id, $user_id);
 <script>
     function show_loader(e) {
         var percent = <?= $mark_percent ?>;
-        if (percent < 100) {
+        if (percent < 70) {
             e.preventDefault();
             alert("Please mark all questions before submitting");
 
         }
-
     }
 </script>

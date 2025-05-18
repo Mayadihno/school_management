@@ -57,7 +57,7 @@ class Profile extends Controller
                     $disabled = '';
                 }
 
-                $query = "select * from tests where class_id in (select class_id from $my_table where user_id = :user_id $disabled) $disabled && year(date) = :school_year  order by date desc";
+                $query = "select * from tests where (class_id in (select class_id from $my_table where user_id = :user_id $disabled) $disabled && year(date) = :school_year) || user_id = :user_id && year(date) = :school_year order by date desc";
                 $arr['user_id'] = $id;
                 $arr['school_year'] = !empty($_SESSION['SCHOOL_YEAR']->year) ? $_SESSION['SCHOOL_YEAR']->year : date("Y", time());
                 if (isset($_GET['find'])) {

@@ -12,7 +12,7 @@ class Students extends Controller
         $user = new User();
         $school_id =  Auth::getSchool_id();
 
-        $limit = 2;
+        $limit = 10;
         $pager = new Pager($limit);
         $offset = $pager->offset;
 

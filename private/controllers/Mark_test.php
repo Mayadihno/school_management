@@ -90,7 +90,7 @@ class Mark_test extends Controller
             $quey = 'select test_id from tests where id = :id';
             $test_id = $db->query($quey, ['id' => $id]);
             $test_id = $test_id[0]->test_id;
-            $query = "select id,correct_answer from test_questions where test_id = :test_id && (question_type = 'multiple' || question_type = 'objective')";
+            $query = "select id,correct_answer from test_questions where test_id = :test_id && (question_type = 'multiple' || question_type = 'objective' || question_type = 'subjective')";
             $original_questions = $db->query($query, [
                 'test_id' => $test_id,
             ]);
@@ -118,7 +118,6 @@ class Mark_test extends Controller
                     }
                 }
             }
-            
         }
 
         //if a test is submitted
@@ -132,7 +131,8 @@ class Mark_test extends Controller
         }
 
         //set test as marked
-        if (isset($_GET['set_as_mark']) && $_GET['set_as_mark'] == 'true'  && get_mark_percentage($id, $users_id) == 100) {
+        if (isset($_GET['set_as_mark']) && $_GET['set_as_mark'] == 'true') {
+            // && get_mark_percentage($id, $users_id) == 100
             $arr_anss['marked_date'] = date("Y-m-d H:i:s");
             $arr_anss['marked'] = 1;
             $arr_anss['test_id'] = $id;

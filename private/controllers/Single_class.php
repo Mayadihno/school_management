@@ -18,7 +18,7 @@ class Single_class extends Controller
         if ($data) {
             $crumbs[] = [$data->class, 'class'];
         }
-        $limit = 2;
+        $limit = 10;
         $pager = new Pager($limit);
         $offset = $pager->offset;
 
