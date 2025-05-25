@@ -3,22 +3,16 @@ name: FTP Deploy
 on:
   push:
     branches:
-      - master  # Make sure your repo uses 'master' as the default branch (or change to 'main' if needed)
+      - master
 
 jobs:
   ftp-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Debug - List all files in repo
-        run: |
-          echo "Listing all files in repo:"
-          find . -type f
-
-      - name: Deploy files to FTP server
+      - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -26,4 +20,4 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: 21
           protocol: ftp
-          local-dir: ./
+          local-dir: ./ 
