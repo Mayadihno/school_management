@@ -24,6 +24,7 @@ class Answered_test extends Model
             $result = $user->where('user_id', $value->user_id);
             $data[$key]->user = is_array($result) ? $result[0] : false;
             //we are setting the new data key to user to accomadate the new value
+            
         }
         return $data;
     }

@@ -77,8 +77,6 @@ class Auth
         if (in_array($rank, $RANK[$logged_in_user])) {
             return true;
         }
-
-
         return false;
     }
 
