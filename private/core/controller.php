@@ -29,6 +29,7 @@ class Controller
         die;
     }
 
+
     public function get_controller_name()
     {
         return strtolower($this::class);
