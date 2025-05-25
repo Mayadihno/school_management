@@ -3,7 +3,7 @@ name: FTP Deploy
 on:
   push:
     branches:
-      - master
+      - master  # Make sure your repo uses 'master' as the default branch (or change to 'main' if needed)
 
 jobs:
   ftp-deploy:
@@ -12,6 +12,11 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+
+      - name: Debug - List all files in repo
+        run: |
+          echo "Listing all files in repo:"
+          find . -type f
 
       - name: Deploy files to FTP server
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
