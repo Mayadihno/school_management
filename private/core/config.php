@@ -1,7 +1,8 @@
 <?php
 
-define('ROOT', 'scholatical.infinityfreeapp.com/');
-define('ASSETS', 'scholatical.infinityfreeapp.com/assets/');
+define('ROOT', 'https://scholatical.infinityfreeapp.com/');
+define('ASSETS', 'https://scholatical.infinityfreeapp.com/assets/');
+
 
 
 define('DB_HOST', 'sql305.infinityfree.com');
