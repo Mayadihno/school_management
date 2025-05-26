@@ -2,4 +2,3 @@
 session_start();
 require './private/core/autoload.php';
 $app = new App();
-echo '<script>var ROOT = "' . ROOT . '";</script>';
